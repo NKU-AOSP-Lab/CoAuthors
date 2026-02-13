@@ -7,6 +7,7 @@ import json
 import logging
 import os
 import re
+import secrets
 import sqlite3
 import threading
 import time
@@ -16,8 +17,9 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any, Literal
 
-from fastapi import FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.responses import HTMLResponse
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
@@ -53,8 +55,7 @@ DEFAULT_DB_PATH = DATA_DIR / "dblp.sqlite"
 # Bootstrap pipeline config
 DEFAULT_XML_GZ_URL = os.getenv("DBLP_XML_GZ_URL", "https://dblp.org/xml/dblp.xml.gz")
 DEFAULT_DTD_URL = os.getenv("DBLP_DTD_URL", "https://dblp.org/xml/dblp.dtd")
-DEFAULT_MODE_ENV = os.getenv("DEFAULT_BUILD_MODE", "fullmeta").strip().lower()
-DEFAULT_MODE = DEFAULT_MODE_ENV if DEFAULT_MODE_ENV in {"base", "fullmeta"} else "fullmeta"
+DEFAULT_MODE = "fullmeta"
 DEFAULT_BATCH_SIZE = int(os.getenv("BATCH_SIZE", "1000"))
 DEFAULT_PROGRESS_EVERY = int(os.getenv("PROGRESS_EVERY", "10000"))
 MAX_LOG_LINES = int(os.getenv("MAX_LOG_LINES", "1000"))
@@ -75,6 +76,30 @@ except ValueError:
 MAX_CONCURRENT_QUERIES = max(int(os.getenv("COAUTHORS_MAX_CONCURRENT_QUERIES", "4")), 1)
 QUERY_ACQUIRE_TIMEOUT_SEC = max(float(os.getenv("COAUTHORS_QUERY_ACQUIRE_TIMEOUT_SEC", "0")), 0.0)
 _query_semaphore = threading.BoundedSemaphore(value=MAX_CONCURRENT_QUERIES)
+
+BOOTSTRAP_USERNAME = os.getenv("BOOTSTRAP_USERNAME", "admin")
+BOOTSTRAP_PASSWORD = os.getenv("BOOTSTRAP_PASSWORD", "changeme")
+_http_basic = HTTPBasic()
+
+
+def _verify_bootstrap_auth(
+    credentials: HTTPBasicCredentials = Depends(_http_basic),
+) -> str:
+    username_ok = secrets.compare_digest(
+        credentials.username.encode("utf-8"),
+        BOOTSTRAP_USERNAME.encode("utf-8"),
+    )
+    password_ok = secrets.compare_digest(
+        credentials.password.encode("utf-8"),
+        BOOTSTRAP_PASSWORD.encode("utf-8"),
+    )
+    if not (username_ok and password_ok):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid credentials.",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
 
 
 @dataclass(frozen=True)
@@ -689,7 +714,7 @@ def _resolve_author_ids_cached(
 
 
 class StartRequest(BaseModel):
-    mode: Literal["base", "fullmeta"] = DEFAULT_MODE  # type: ignore[assignment]
+    mode: Literal["fullmeta"] = "fullmeta"
     xml_gz_url: str = Field(default=DEFAULT_XML_GZ_URL, min_length=10)
     dtd_url: str = Field(default=DEFAULT_DTD_URL, min_length=10)
     rebuild: bool = True
@@ -1104,30 +1129,8 @@ def index(request: Request) -> HTMLResponse:
     )
 
 
-@app.get("/console", response_class=HTMLResponse)
-def console(request: Request) -> HTMLResponse:
-    visit_count = _record_page_view(request)
-    _log_event(
-        {
-            "type": "page_view",
-            "path": "/console",
-            "ip": _get_client_ip(request),
-            "ua": _get_user_agent(request),
-            "visit_count": visit_count,
-        }
-    )
-    return templates.TemplateResponse(
-        "console.html",
-        {
-            "request": request,
-            "app_version": APP_VERSION,
-            "visit_count": visit_count,
-        },
-    )
-
-
 @app.get("/bootstrap", response_class=HTMLResponse)
-def bootstrap_console(request: Request) -> HTMLResponse:
+def bootstrap_console(request: Request, _user: str = Depends(_verify_bootstrap_auth)) -> HTMLResponse:
     visit_count = _record_page_view(request)
     _log_event(
         {
@@ -1468,7 +1471,7 @@ def api_coauthors_pairs(payload: CoauthoredPairsRequest, request: Request) -> di
 
 
 @app.get("/api/config")
-def api_config() -> dict[str, Any]:
+def api_config(_user: str = Depends(_verify_bootstrap_auth)) -> dict[str, Any]:
     return {
         "default_mode": DEFAULT_MODE,
         "default_xml_gz_url": DEFAULT_XML_GZ_URL,
@@ -1480,12 +1483,12 @@ def api_config() -> dict[str, Any]:
 
 
 @app.get("/api/state")
-def api_state() -> dict[str, Any]:
+def api_state(_user: str = Depends(_verify_bootstrap_auth)) -> dict[str, Any]:
     return manager.snapshot()
 
 
 @app.get("/api/files")
-def api_files() -> dict[str, Any]:
+def api_files(_user: str = Depends(_verify_bootstrap_auth)) -> dict[str, Any]:
     return {
         "data_dir": str(DATA_DIR),
         "files": {
@@ -1500,15 +1503,15 @@ def api_files() -> dict[str, Any]:
 
 
 @app.post("/api/start")
-def api_start(req: StartRequest) -> dict[str, Any]:
+def api_start(req: StartRequest, _user: str = Depends(_verify_bootstrap_auth)) -> dict[str, Any]:
     return manager.start(req)
 
 
 @app.post("/api/stop")
-def api_stop() -> dict[str, Any]:
+def api_stop(_user: str = Depends(_verify_bootstrap_auth)) -> dict[str, Any]:
     return manager.stop()
 
 
 @app.post("/api/reset")
-def api_reset() -> dict[str, Any]:
+def api_reset(_user: str = Depends(_verify_bootstrap_auth)) -> dict[str, Any]:
     return manager.reset()

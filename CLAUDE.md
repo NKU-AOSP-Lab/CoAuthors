@@ -15,7 +15,7 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8090
 docker compose up -d --build
 ```
 
-UI routes: `/` (user query), `/console` (advanced query), `/bootstrap` (pipeline console).
+UI routes: `/` (user query), `/bootstrap` (pipeline console, HTTP Basic Auth protected).
 
 No automated test suite exists. If adding tests, use `pytest` + FastAPI `TestClient` under `tests/test_*.py`.
 
@@ -26,7 +26,7 @@ No automated test suite exists. If adding tests, use `pytest` + FastAPI `TestCli
 - `builder.py` — DBLP pipeline: download XML.GZ, decompress, parse with lxml iterparse, build SQLite database
 
 **Frontend** is vanilla JS + CSS with Jinja2 templates (no framework):
-- `static/query_app.js` — shared logic for both `/` and `/console` pages (API calls, rendering, i18n, theme switching)
+- `static/query_app.js` — logic for the `/` query page (API calls, rendering, i18n, theme switching)
 - `static/bootstrap_app.js` — bootstrap console logic (start/stop/reset, polling, live logs)
 - Templates receive config via Jinja2 context; JS reads it from DOM and localStorage
 

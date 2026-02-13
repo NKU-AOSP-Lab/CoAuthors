@@ -15,11 +15,6 @@
         <div>
           <h1 data-i18n="bootstrap_title">CoAuthors Bootstrap Console</h1>
           <p data-i18n="bootstrap_subtitle">Download XML/DTD, decompress XML, and build DBLP SQLite through the web.</p>
-          <div class="page-links">
-            <a class="page-link" href="/" data-i18n="nav_user">User Page</a>
-            <a class="page-link" href="/console" data-i18n="nav_console">Advanced Console</a>
-            <a class="page-link active" href="/bootstrap" data-i18n="nav_bootstrap">Bootstrap Console</a>
-          </div>
         </div>
 
         <div class="top-controls">
@@ -50,9 +45,8 @@
         <form id="start-form" class="grid-form">
           <label>
             <span data-i18n="bootstrap_mode">Build Mode</span>
-            <select id="mode">
-              <option value="base" {% if default_mode == "base" %}selected{% endif %}>base</option>
-              <option value="fullmeta" {% if default_mode == "fullmeta" %}selected{% endif %}>fullmeta</option>
+            <select id="mode" disabled>
+              <option value="fullmeta" selected>fullmeta</option>
             </select>
           </label>
 

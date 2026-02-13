@@ -20,8 +20,6 @@ const yearSliderEl = document.getElementById("year-slider");
 const yearSliderLabelEl = document.getElementById("year-slider-label");
 const pcConflictToggleEl = document.getElementById("pc-conflict-toggle");
 const rightAuthorsEl = document.getElementById("right-authors");
-const isConsolePage = document.body?.dataset.page === "console";
-
 let latestPairPubs = [];
 let loadingTimer = null;
 let loadingStartedAt = 0;
@@ -39,16 +37,9 @@ let currentLang = "en";
 const I18N = {
   en: {
     page_title_user: "CoAuthors Coauthorship Query",
-    page_title_console: "CoAuthors Advanced Console",
     hero_user_title: "CoAuthors Coauthorship Query",
     hero_user_subtitle:
       "Enter two author sets to find coauthored pairs and publication metadata.",
-    hero_console_title: "CoAuthors Advanced Console",
-    hero_console_subtitle:
-      "For experiments and tuning: configure advanced options for batch coauthor queries.",
-    nav_user: "User Page",
-    nav_console: "Advanced Console",
-    nav_bootstrap: "Bootstrap Console",
     control_style: "Style",
     control_language: "Language",
     lang_en: "English",
@@ -69,21 +60,9 @@ const I18N = {
     query_left_user: "Author Set A (one per line)",
     query_right_user: "Author Set B (one per line)",
     query_button_user: "Start Matching",
-    query_title_console: "coauthored_pairs Query",
-    query_hint_console:
-      "If an input contains an organization (e.g., `Yann LeCun (New York University)`), it will be stripped automatically.",
-    query_left_console: "Left Authors (one per line)",
-    query_right_console: "Right Authors (one per line)",
-    query_limit_per_pair: "limit_per_pair (optional, empty = unlimited)",
-    query_author_limit: "author_limit (optional, empty = unlimited)",
-    query_exact_base: "exact_base_match = true",
-    query_button_console: "Run coauthored_pairs",
     matrix_title_user: "Coauthorship Matrix",
-    matrix_title_console: "Matrix",
     pubs_title_user: "Coauthored Publications",
-    pubs_title_console: "Pair Publications",
     pair_selector_user: "Select Pair",
-    pair_selector_console: "Select Pair",
     table_title: "Title",
     table_year: "Year",
     table_venue: "Venue",
@@ -94,24 +73,17 @@ const I18N = {
     year_slider_recent: "Recent {n} years (since {since})",
     placeholder_left: "Geoffrey Hinton\nYann LeCun (New York University)",
     placeholder_right: "Andrew Y. Ng\nYoshua Bengio (Universite de Montreal)",
-    placeholder_unlimited: "Unlimited",
     loading_default: "Matching...",
     matrix_left_right: "LEFT \\ RIGHT",
     matrix_count_header: "Coauthored Count",
     no_coauthored_pairs: "No coauthored pairs",
     no_publications: "No publications",
-    msg_require_both_user: "Please enter at least one author on both sides.",
-    msg_require_both_console: "Both left and right author lists are required.",
-    msg_matching_user: "Matching {n} author pairs...",
-    msg_matching_console: "Matching {n} pairs...",
-    msg_completed_user: "Completed: found {n} coauthored pairs.",
-    msg_completed_console:
-      "Completed {n} coauthored pairs (mode={mode}, limit_per_pair={limit}).",
+    msg_require_both: "Please enter at least one author on both sides.",
+    msg_matching: "Matching {n} author pairs...",
+    msg_completed: "Completed: found {n} coauthored pairs.",
     msg_query_failed: "Query failed: {err}",
-    msg_too_many_authors_user: "Too many authors. Max {max} per side.",
-    msg_too_many_authors_console: "Too many authors. Max {max} per side is allowed.",
+    msg_too_many_authors: "Too many authors. Max {max} per side.",
     elapsed: "Elapsed",
-    unlimited: "unlimited",
     footer_title: "Project Information",
     footer_dev_label: "Developer",
     footer_dev_value: "Nankai University AOSP Laboratory",
@@ -133,14 +105,8 @@ const I18N = {
   },
   zh: {
     page_title_user: "CoAuthors 共作查询",
-    page_title_console: "CoAuthors 高级控制台",
     hero_user_title: "CoAuthors 共作查询系统",
     hero_user_subtitle: "输入两组作者姓名，返回存在共作关系的作者对与论文元数据。",
-    hero_console_title: "CoAuthors 高级控制台",
-    hero_console_subtitle: "面向实验与调参：可配置高级参数进行批量共作检索。",
-    nav_user: "用户页面",
-    nav_console: "高级控制台",
-    nav_bootstrap: "建库控制台",
     control_style: "页面风格",
     control_language: "语言",
     lang_en: "英文",
@@ -161,21 +127,9 @@ const I18N = {
     query_left_user: "作者集合 A（每行一个）",
     query_right_user: "作者集合 B（每行一个）",
     query_button_user: "开始匹配",
-    query_title_console: "coauthored_pairs 查询",
-    query_hint_console:
-      "若输入包含机构信息（如 `Yann LeCun (New York University)`），系统会自动剔除括号内容。",
-    query_left_console: "左侧作者（每行一个）",
-    query_right_console: "右侧作者（每行一个）",
-    query_limit_per_pair: "limit_per_pair（可选，留空为不限制）",
-    query_author_limit: "author_limit（可选，留空为不限制）",
-    query_exact_base: "exact_base_match = true",
-    query_button_console: "执行 coauthored_pairs",
     matrix_title_user: "共作矩阵",
-    matrix_title_console: "矩阵",
     pubs_title_user: "共作论文列表",
-    pubs_title_console: "配对论文列表",
     pair_selector_user: "选择作者对",
-    pair_selector_console: "选择作者对",
     table_title: "标题",
     table_year: "年份",
     table_venue: "会议/期刊",
@@ -186,23 +140,17 @@ const I18N = {
     year_slider_recent: "近 {n} 年（{since} 年起）",
     placeholder_left: "Geoffrey Hinton\nYann LeCun (New York University)",
     placeholder_right: "Andrew Y. Ng\nYoshua Bengio (Universite de Montreal)",
-    placeholder_unlimited: "不限制",
     loading_default: "匹配中...",
     matrix_left_right: "左侧 \\ 右侧",
     matrix_count_header: "共作数量",
     no_coauthored_pairs: "没有共作作者对",
     no_publications: "没有论文",
-    msg_require_both_user: "请在两侧都输入至少一个作者姓名。",
-    msg_require_both_console: "左右作者列表都不能为空。",
-    msg_matching_user: "正在匹配 {n} 个作者对...",
-    msg_matching_console: "正在匹配 {n} 个配对...",
-    msg_completed_user: "匹配完成：共找到 {n} 个有共作关系的作者对。",
-    msg_completed_console: "完成：共找到 {n} 个共作配对（mode={mode}, limit_per_pair={limit}）。",
+    msg_require_both: "请在两侧都输入至少一个作者姓名。",
+    msg_matching: "正在匹配 {n} 个作者对...",
+    msg_completed: "匹配完成：共找到 {n} 个有共作关系的作者对。",
     msg_query_failed: "查询失败：{err}",
-    msg_too_many_authors_user: "作者过多：每侧最多 {max} 个。",
-    msg_too_many_authors_console: "作者过多：每侧最多允许 {max} 个。",
+    msg_too_many_authors: "作者过多：每侧最多 {max} 个。",
     elapsed: "耗时",
-    unlimited: "不限制",
     footer_title: "项目信息",
     footer_dev_label: "开发团队",
     footer_dev_value: "南开大学 AOSP 实验室",
@@ -410,9 +358,7 @@ function setQueryLoading(isLoading, totalPairs = 0) {
     loadingStartedAt = Date.now();
     loadingBoxEl.classList.add("is-active");
     pairsFormEl.classList.add("is-loading");
-    loadingTextEl.textContent = isConsolePage
-      ? t("msg_matching_console", { n: fmtNum(totalPairs) })
-      : t("msg_matching_user", { n: fmtNum(totalPairs) });
+    loadingTextEl.textContent = t("msg_matching", { n: fmtNum(totalPairs) });
     loadingElapsedEl.textContent = `${t("elapsed")} 0s`;
 
     pairsFormEl.querySelectorAll("textarea, input, select, button").forEach((el) => {
@@ -604,16 +550,11 @@ if (pairsFormEl) {
     const exactBaseMatch = exactBaseMatchEl ? Boolean(exactBaseMatchEl.checked) : true;
 
     if (left.length === 0 || right.length === 0) {
-      showMsg(isConsolePage ? t("msg_require_both_console") : t("msg_require_both_user"), true);
+      showMsg(t("msg_require_both"), true);
       return;
     }
     if (left.length > MAX_AUTHORS_PER_SIDE || right.length > MAX_AUTHORS_PER_SIDE) {
-      showMsg(
-        isConsolePage
-          ? t("msg_too_many_authors_console", { max: MAX_AUTHORS_PER_SIDE })
-          : t("msg_too_many_authors_user", { max: MAX_AUTHORS_PER_SIDE }),
-        true
-      );
+      showMsg(t("msg_too_many_authors", { max: MAX_AUTHORS_PER_SIDE }), true);
       return;
     }
 
@@ -636,11 +577,7 @@ if (pairsFormEl) {
     }
 
     setQueryLoading(true, totalPairs);
-    showMsg(
-      isConsolePage
-        ? t("msg_matching_console", { n: fmtNum(totalPairs) })
-        : t("msg_matching_user", { n: fmtNum(totalPairs) })
-    );
+    showMsg(t("msg_matching", { n: fmtNum(totalPairs) }));
 
     try {
       const data = await fetchJson("/api/coauthors/pairs", {
@@ -655,18 +592,7 @@ if (pairsFormEl) {
       const coauthoredPairCount = (data.pair_pubs || []).filter((pair) => (pair.count ?? 0) > 0)
         .length;
 
-      if (isConsolePage) {
-        const limitText = data.limit_per_pair == null ? t("unlimited") : String(data.limit_per_pair);
-        showMsg(
-          t("msg_completed_console", {
-            n: coauthoredPairCount,
-            mode: data.mode,
-            limit: limitText,
-          })
-        );
-      } else {
-        showMsg(t("msg_completed_user", { n: fmtNum(coauthoredPairCount) }));
-      }
+      showMsg(t("msg_completed", { n: fmtNum(coauthoredPairCount) }));
     } catch (err) {
       clearNode(matrixHeadEl);
       clearNode(matrixBodyEl);

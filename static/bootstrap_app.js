@@ -10,9 +10,6 @@ let currentLang = "en";
 const I18N = {
   en: {
     page_title_bootstrap: "CoAuthors Bootstrap Console",
-    nav_user: "User Page",
-    nav_console: "Advanced Console",
-    nav_bootstrap: "Bootstrap Console",
     control_style: "Style",
     control_language: "Language",
     lang_en: "English",
@@ -72,9 +69,6 @@ const I18N = {
   },
   zh: {
     page_title_bootstrap: "CoAuthors 建库控制台",
-    nav_user: "用户页面",
-    nav_console: "高级控制台",
-    nav_bootstrap: "建库控制台",
     control_style: "页面风格",
     control_language: "语言",
     lang_en: "英文",
