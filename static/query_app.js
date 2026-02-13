@@ -99,6 +99,8 @@ const I18N = {
     footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
     lab_name: "AOSP Laboratory, Nankai University",
     lab_slogan: "All-in-One Security and Privacy Lab",
+    lab_description:
+      "The lab focuses on diversified security and privacy research, spanning network security, Web security, LLM security, and emerging security risks. It is dedicated to enhancing overall security in scenarios where network technologies converge with large models, and continuously supports the security community through original research contributions.",
     lab_advisor_intro:
       'Advisor: <a href="https://lixiang521.com/" target="_blank" rel="noopener">Xiang Li</a>, Associate Professor at the College of Cryptology and Cyber Science, Nankai University. National Outstanding Talent in Cyberspace. Research areas include network security, protocol security, vulnerability discovery, and LLM security. Published 30+ papers at international conferences, including 10+ as first/corresponding author, achieving a grand slam of first-author papers across all top-4 cybersecurity venues, and has presented at Black Hat for four consecutive years. Led or participated in 9 national-level projects, filed 10+ patents, and received 250+ vulnerability IDs. Awards include ACM SIGSAC China Outstanding Doctoral Dissertation, GeekPwn champion & runner-up, Pwnie Award nomination for Most Innovative Research, and ACSAC Cybersecurity Impact Award.',
     lab_qrcode_caption: "Follow AOSP Lab",
@@ -165,6 +167,8 @@ const I18N = {
     footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
     lab_name: "南开大学 AOSP 实验室",
     lab_slogan: "All-in-One Security and Privacy Lab",
+    lab_description:
+      "实验室：聚焦多元化安全与隐私研究，涵盖网络安全、Web 安全、大模型安全及新兴安全风险等方向，致力于提升网络技术与大模型融合场景下的整体安全性，并通过原创性研究成果持续服务与支撑安全社区发展。",
     lab_advisor_intro:
       '导师：<a href="https://lixiang521.com/" target="_blank" rel="noopener">李想</a>，南开大学密码与网络空间安全学院副教授，国家网信领域优秀人才，研究领域包括网络安全、协议安全、漏洞挖掘与大模型安全，已发表国际会议论文三十余篇，其中第一作者或通讯作者论文十余篇，实现网络安全顶会论文一作大满贯，并连续四年在 Black Hat 上完成报告，主持或参与国家级等项目九项，申请专利十余项，获批漏洞编号 250+，获得 ACM SIGSAC 中国优博奖、国际安全极客大赛冠亚军、全球黑客奥斯卡最具创新研究提名奖、ACSAC 网络安全技术成果影响力奖等。',
     lab_qrcode_caption: "关注 AOSP 实验室",
