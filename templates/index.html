@@ -1,0 +1,178 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="page_title_user">CoAuthors Coauthorship Query</title>
+    <link rel="stylesheet" href="/static/query_styles.css" />
+  </head>
+  <body data-style="campus" data-page="user">
+    <div class="bg-layer" aria-hidden="true"></div>
+
+    <main class="container">
+      <header class="hero">
+        <div>
+          <h1 data-i18n="hero_user_title">CoAuthors Coauthorship Query</h1>
+          <p data-i18n="hero_user_subtitle">
+            Enter two author sets to find coauthored pairs and publication metadata.
+          </p>
+          <div class="page-links">
+            <a class="page-link active" href="/" data-i18n="nav_user">User Page</a>
+            <a class="page-link" href="/console" data-i18n="nav_console">Advanced Console</a>
+            <a class="page-link" href="/bootstrap" data-i18n="nav_bootstrap">Bootstrap Console</a>
+          </div>
+        </div>
+
+        <div class="top-controls">
+          <div class="style-control">
+            <label for="style-select" data-i18n="control_style">Style</label>
+            <select id="style-select">
+              <option value="hotcrp">HotCRP Classic</option>
+              <option value="journal">Journal Serif</option>
+              <option value="nordic">Nordic Light</option>
+              <option value="campus">Campus Modern</option>
+              <option value="folio">Folio Minimal</option>
+              <option value="slate">Slate Pro</option>
+            </select>
+          </div>
+
+          <div class="style-control">
+            <label for="language-select" data-i18n="control_language">Language</label>
+            <select id="language-select">
+              <option value="en" data-i18n="lang_en">English</option>
+              <option value="zh" data-i18n="lang_zh">Chinese</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <section class="status-grid">
+        <article class="card">
+          <h2 data-i18n="status_title">System Status</h2>
+          <div class="status-row">
+            <span class="label" data-i18n="status_service">Service</span>
+            <span id="health-status" class="chip chip-warn" data-i18n="status_checking">Checking</span>
+          </div>
+          <div class="status-row">
+            <span class="label" data-i18n="status_source">Data Source</span>
+            <span id="data-source">DBLP</span>
+          </div>
+          <div class="status-row">
+            <span class="label" data-i18n="status_date">Data Date</span>
+            <span id="data-date">-</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2 data-i18n="stats_title">Data Scale</h2>
+          <div class="kpi-row">
+            <div class="kpi">
+              <span class="kpi-label" data-i18n="stats_publications">Publications</span>
+              <strong id="kpi-pubs">-</strong>
+            </div>
+            <div class="kpi">
+              <span class="kpi-label" data-i18n="stats_authors">Authors</span>
+              <strong id="kpi-authors">-</strong>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="card">
+        <h2 data-i18n="query_title_user">Coauthorship Matching</h2>
+        <p class="hint" data-i18n="query_hint_user">
+          One author per line. If an input contains an organization (e.g., `Yann LeCun (New York University)`), it will be stripped automatically.
+        </p>
+
+        <form id="pairs-form" class="pair-form user-form">
+          <label>
+            <span data-i18n="query_left_user">Author Set A (one per line)</span>
+            <textarea
+              id="left-authors"
+              rows="9"
+              data-i18n-placeholder="placeholder_left"
+              placeholder="Geoffrey Hinton&#10;Yann LeCun (New York University)"
+              required
+            ></textarea>
+          </label>
+
+          <label>
+            <span data-i18n="query_right_user">Author Set B (one per line)</span>
+            <textarea
+              id="right-authors"
+              rows="9"
+              data-i18n-placeholder="placeholder_right"
+              placeholder="Andrew Y. Ng&#10;Yoshua Bengio (Universite de Montreal)"
+              required
+            ></textarea>
+          </label>
+
+          <button id="run-pairs-btn" type="submit" data-i18n="query_button_user">Start Matching</button>
+        </form>
+
+        <div id="pairs-loading" class="loading-box" aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span>
+          <span id="pairs-loading-text" data-i18n="loading_default">Matching...</span>
+          <span id="pairs-loading-elapsed"></span>
+        </div>
+
+        <p id="pairs-msg" class="msg"></p>
+
+        <h3 data-i18n="matrix_title_user">Coauthorship Matrix</h3>
+        <div class="table-wrap">
+          <table>
+            <thead id="matrix-head"></thead>
+            <tbody id="matrix-body"></tbody>
+          </table>
+        </div>
+
+        <h3 data-i18n="pubs_title_user">Coauthored Publications</h3>
+        <label class="pair-picker">
+          <span data-i18n="pair_selector_user">Select Pair</span>
+          <select id="pair-selector"></select>
+        </label>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="table_title">Title</th>
+                <th data-i18n="table_year">Year</th>
+                <th data-i18n="table_venue">Venue</th>
+                <th data-i18n="table_type">Type</th>
+              </tr>
+            </thead>
+            <tbody id="pair-pubs-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="card footer-card">
+        <h2 data-i18n="footer_title">Project Information</h2>
+        <div class="meta-grid">
+          <div class="meta-row">
+            <span data-i18n="footer_dev_label">Developer</span>
+            <strong data-i18n="footer_dev_value">Nankai University AOSP Laboratory</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="footer_maintainer_label">Maintainer</span>
+            <strong data-i18n="footer_maintainer_value">Nankai University AOSP Laboratory</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="footer_version_label">Version</span>
+            <strong>v2.1.0</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="footer_features_label">Current Features</span>
+            <strong data-i18n="footer_features_value">Coauthor matrix, pair publications, metadata output, bootstrap build pipeline.</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="footer_license_label">License</span>
+            <strong>MIT</strong>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script src="/static/query_app.js"></script>
+  </body>
+</html>

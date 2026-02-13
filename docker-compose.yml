@@ -1,0 +1,23 @@
+﻿services:
+  dblp-bootstrap-console:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dblp-bootstrap-console
+    ports:
+      - "${BOOT_WEB_PORT:-8090}:8090"
+    environment:
+      DATA_DIR: "/data"
+      DBLP_XML_GZ_URL: "${DBLP_XML_GZ_URL:-https://dblp.org/xml/dblp.xml.gz}"
+      DBLP_DTD_URL: "${DBLP_DTD_URL:-https://dblp.org/xml/dblp.dtd}"
+      DEFAULT_BUILD_MODE: "${DEFAULT_BUILD_MODE:-fullmeta}"
+      BATCH_SIZE: "${BATCH_SIZE:-1000}"
+      PROGRESS_EVERY: "${PROGRESS_EVERY:-10000}"
+      MAX_LOG_LINES: "${MAX_LOG_LINES:-1000}"
+    volumes:
+      - dblp_bootstrap_data:/data
+    restart: unless-stopped
+
+volumes:
+  dblp_bootstrap_data:
+

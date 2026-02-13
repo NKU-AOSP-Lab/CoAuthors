@@ -1,0 +1,40 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Runtime data
+/data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.xml
+*.xml.gz
+*.dtd
+
+# Logs
+*.log
+
+# Build / package
+dist/
+build/
+*.egg-info/
+
+# Git
+.git/
