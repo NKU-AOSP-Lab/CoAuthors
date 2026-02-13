@@ -100,7 +100,7 @@ const I18N = {
     lab_name: "AOSP Laboratory, Nankai University",
     lab_slogan: "All-in-One Security and Privacy Lab",
     lab_advisor_intro:
-      'Advisor: Associate Professor <a href="https://lixiang521.com/" target="_blank" rel="noopener">Xiang Li</a>, College of Cryptology and Cyber Science, Nankai University. Ph.D. from Tsinghua University. Research focuses on network security, protocol security, DNS security, and Internet measurement. Published 32+ papers at top venues (S&P, USENIX Security, CCS, NDSS). Discovered 250+ CVE/CNVD/CNNVD vulnerabilities. 2024 ACM SIGSAC China Excellent Doctoral Dissertation Award. Pwnie Award nominee 2024.',
+      'Advisor: <a href="https://lixiang521.com/" target="_blank" rel="noopener">Xiang Li</a>, Associate Professor at the College of Cryptology and Cyber Science, Nankai University. National Outstanding Talent in Cyberspace. Research areas include network security, protocol security, vulnerability discovery, and LLM security. Published 30+ papers at international conferences, including 10+ as first/corresponding author, achieving a grand slam of first-author papers across all top-4 cybersecurity venues, and has presented at Black Hat for four consecutive years. Led or participated in 9 national-level projects, filed 10+ patents, and received 250+ vulnerability IDs. Awards include ACM SIGSAC China Outstanding Doctoral Dissertation, GeekPwn champion & runner-up, Pwnie Award nomination for Most Innovative Research, and ACSAC Cybersecurity Impact Award.',
     lab_qrcode_caption: "Follow AOSP Lab",
   },
   zh: {
@@ -166,7 +166,7 @@ const I18N = {
     lab_name: "南开大学 AOSP 实验室",
     lab_slogan: "All-in-One Security and Privacy Lab",
     lab_advisor_intro:
-      '导师：南开大学密码与网络空间安全学院副教授<a href="https://lixiang521.com/" target="_blank" rel="noopener">李想</a>，清华大学博士。研究方向：网络安全、协议安全、DNS 安全、互联网测量。在 S&P、USENIX Security、CCS、NDSS 等顶级会议发表论文 32 余篇，发现 250+ CVE/CNVD/CNNVD 漏洞。2024 年 ACM SIGSAC 中国优秀博士论文奖，2024 年 Pwnie Award 最具创新性研究提名。',
+      '导师：<a href="https://lixiang521.com/" target="_blank" rel="noopener">李想</a>，南开大学密码与网络空间安全学院副教授，国家网信领域优秀人才，研究领域包括网络安全、协议安全、漏洞挖掘与大模型安全，已发表国际会议论文三十余篇，其中第一作者或通讯作者论文十余篇，实现网络安全顶会论文一作大满贯，并连续四年在 Black Hat 上完成报告，主持或参与国家级等项目九项，申请专利十余项，获批漏洞编号 250+，获得 ACM SIGSAC 中国优博奖、国际安全极客大赛冠亚军、全球黑客奥斯卡最具创新研究提名奖、ACSAC 网络安全技术成果影响力奖等。',
     lab_qrcode_caption: "关注 AOSP 实验室",
   },
 };
