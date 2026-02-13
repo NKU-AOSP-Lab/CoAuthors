@@ -6,33 +6,33 @@
   --page-width: 1120px;
   --block-gap: 14px;
 
-  --body-bg: #f2f5f9;
-  --overlay-bg: radial-gradient(circle at 84% 8%, rgba(111, 148, 196, 0.16) 0 10%, transparent 42%),
-    linear-gradient(180deg, #f7f9fc 0%, #eef2f8 100%);
+  --body-bg: #f7f7f8;
+  --overlay-bg: radial-gradient(circle at 84% 8%, rgba(180, 180, 190, 0.10) 0 10%, transparent 42%),
+    linear-gradient(180deg, #fcfcfd 0%, #f4f4f6 100%);
   --overlay-opacity: 1;
 
-  --ink: #1f2f3f;
-  --ink-soft: #556778;
-  --line: #c8d5e4;
-  --line-strong: #aebed1;
+  --ink: #222222;
+  --ink-soft: #666666;
+  --line: #e0e0e0;
+  --line-strong: #cccccc;
   --card-bg: #ffffff;
-  --hero-bg: linear-gradient(180deg, #f9fbff 0%, #eef3fa 100%);
+  --hero-bg: linear-gradient(180deg, #fefefe 0%, #f6f6f8 100%);
   --card-border-width: 1px;
   --radius: 8px;
   --control-radius: 6px;
-  --shadow: 0 1px 2px rgba(28, 45, 64, 0.08);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 
-  --accent: #2f5f99;
-  --accent-2: #234a79;
-  --button-bg: linear-gradient(180deg, #3a6cab 0%, #2f5f99 100%);
+  --accent: #444444;
+  --accent-2: #333333;
+  --button-bg: linear-gradient(180deg, #555555 0%, #444444 100%);
   --button-ink: #ffffff;
-  --button-border: 1px solid #2b527f;
-  --button-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --button-border: 1px solid #3a3a3a;
+  --button-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
 
   --input-bg: #ffffff;
-  --input-ink: #1f2f3f;
-  --focus-outline: rgba(65, 120, 190, 0.22);
-  --focus-border: #4b78ad;
+  --input-ink: #222222;
+  --focus-outline: rgba(100, 100, 100, 0.18);
+  --focus-border: #888888;
 
   --ok: #146d40;
   --warn: #8a6400;
@@ -41,18 +41,18 @@
   --chip-warn-bg: #f8f1de;
   --chip-error-bg: #f8e3e3;
 
-  --kpi-bg: #f8fbff;
-  --loading-bg: #f5f8fc;
-  --loading-border: #d8e1ec;
-  --loading-text: #365370;
-  --spinner-ring: #cad6e7;
-  --spinner-head: #2f5f99;
+  --kpi-bg: #fafafa;
+  --loading-bg: #f8f8f9;
+  --loading-border: #e2e2e4;
+  --loading-text: #444444;
+  --spinner-ring: #d8d8d8;
+  --spinner-head: #444444;
 
-  --table-head-bg: #edf3fb;
-  --table-head-ink: #2f435a;
-  --table-row-line: #e4ebf3;
-  --count-hot-bg: #e9f1fb;
-  --count-hot-ink: #1f5a9f;
+  --table-head-bg: #f4f4f5;
+  --table-head-ink: #333333;
+  --table-row-line: #ebebeb;
+  --count-hot-bg: #f0f0f2;
+  --count-hot-ink: #333333;
 }
 
 body[data-style="journal"] {

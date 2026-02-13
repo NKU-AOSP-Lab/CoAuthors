@@ -98,7 +98,7 @@ const I18N = {
     footer_copyright_label: "Copyright",
     footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
     lab_name: "AOSP Laboratory, Nankai University",
-    lab_slogan: "All-in-One Secure and Privacy",
+    lab_slogan: "All-in-One Security and Privacy Lab",
     lab_advisor_intro:
       'Advisor: Associate Professor <a href="https://lixiang521.com/" target="_blank" rel="noopener">Xiang Li</a>, College of Cryptology and Cyber Science, Nankai University. Ph.D. from Tsinghua University. Research focuses on network security, protocol security, DNS security, and Internet measurement. Published 32+ papers at top venues (S&P, USENIX Security, CCS, NDSS). Discovered 250+ CVE/CNVD/CNNVD vulnerabilities. 2024 ACM SIGSAC China Excellent Doctoral Dissertation Award. Pwnie Award nominee 2024.',
     lab_qrcode_caption: "Follow AOSP Lab",
@@ -164,7 +164,7 @@ const I18N = {
     footer_copyright_label: "版权",
     footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
     lab_name: "南开大学 AOSP 实验室",
-    lab_slogan: "All-in-One Secure and Privacy",
+    lab_slogan: "All-in-One Security and Privacy Lab",
     lab_advisor_intro:
       '导师：南开大学密码与网络空间安全学院副教授<a href="https://lixiang521.com/" target="_blank" rel="noopener">李想</a>，清华大学博士。研究方向：网络安全、协议安全、DNS 安全、互联网测量。在 S&P、USENIX Security、CCS、NDSS 等顶级会议发表论文 32 余篇，发现 250+ CVE/CNVD/CNNVD 漏洞。2024 年 ACM SIGSAC 中国优秀博士论文奖，2024 年 Pwnie Award 最具创新性研究提名。',
     lab_qrcode_caption: "关注 AOSP 实验室",
