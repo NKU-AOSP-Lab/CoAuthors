@@ -16,17 +16,24 @@ const loadingElapsedEl = document.getElementById("pairs-loading-elapsed");
 
 const styleSelectEl = document.getElementById("style-select");
 const languageSelectEl = document.getElementById("language-select");
+const yearSliderEl = document.getElementById("year-slider");
+const yearSliderLabelEl = document.getElementById("year-slider-label");
+const pcConflictToggleEl = document.getElementById("pc-conflict-toggle");
+const rightAuthorsEl = document.getElementById("right-authors");
 const isConsolePage = document.body?.dataset.page === "console";
 
 let latestPairPubs = [];
 let loadingTimer = null;
 let loadingStartedAt = 0;
 let healthState = "checking";
+let pcMembers = null;
+let savedRightAuthors = "";
 
 const STYLE_STORAGE_KEY = "coauthors_style";
 const LANG_STORAGE_KEY = "coauthors_lang";
 const SUPPORTED_STYLES = new Set(["hotcrp", "journal", "nordic", "campus", "folio", "slate"]);
 const SUPPORTED_LANGS = new Set(["en", "zh"]);
+const MAX_AUTHORS_PER_SIDE = 50;
 let currentLang = "en";
 
 const I18N = {
@@ -81,6 +88,10 @@ const I18N = {
     table_year: "Year",
     table_venue: "Venue",
     table_type: "Type",
+    query_recent_years: "Recent Years",
+    query_pc_conflict: "CCS New PC Conflict Check",
+    year_slider_all: "All",
+    year_slider_recent: "Recent {n} years (since {since})",
     placeholder_left: "Geoffrey Hinton\nYann LeCun (New York University)",
     placeholder_right: "Andrew Y. Ng\nYoshua Bengio (Universite de Montreal)",
     placeholder_unlimited: "Unlimited",
@@ -97,6 +108,8 @@ const I18N = {
     msg_completed_console:
       "Completed {n} coauthored pairs (mode={mode}, limit_per_pair={limit}).",
     msg_query_failed: "Query failed: {err}",
+    msg_too_many_authors_user: "Too many authors. Max {max} per side.",
+    msg_too_many_authors_console: "Too many authors. Max {max} per side is allowed.",
     elapsed: "Elapsed",
     unlimited: "unlimited",
     footer_title: "Project Information",
@@ -109,6 +122,14 @@ const I18N = {
     footer_features_value:
       "Coauthor matrix, pair publications, metadata output, bootstrap build pipeline.",
     footer_license_label: "License",
+    footer_visits_label: "Visits",
+    footer_copyright_label: "Copyright",
+    footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
+    lab_name: "AOSP Laboratory, Nankai University",
+    lab_slogan: "All-in-One Secure and Privacy",
+    lab_advisor_intro:
+      'Advisor: Associate Professor <a href="https://lixiang521.com/" target="_blank" rel="noopener">Xiang Li</a>, College of Cryptology and Cyber Science, Nankai University. Ph.D. from Tsinghua University. Research focuses on network security, protocol security, DNS security, and Internet measurement. Published 32+ papers at top venues (S&P, USENIX Security, CCS, NDSS). Discovered 250+ CVE/CNVD/CNNVD vulnerabilities. 2024 ACM SIGSAC China Excellent Doctoral Dissertation Award. Pwnie Award nominee 2024.',
+    lab_qrcode_caption: "Follow AOSP Lab",
   },
   zh: {
     page_title_user: "CoAuthors 共作查询",
@@ -159,6 +180,10 @@ const I18N = {
     table_year: "年份",
     table_venue: "会议/期刊",
     table_type: "类型",
+    query_recent_years: "近年范围",
+    query_pc_conflict: "CCS New PC Conflict 检查",
+    year_slider_all: "全部",
+    year_slider_recent: "近 {n} 年（{since} 年起）",
     placeholder_left: "Geoffrey Hinton\nYann LeCun (New York University)",
     placeholder_right: "Andrew Y. Ng\nYoshua Bengio (Universite de Montreal)",
     placeholder_unlimited: "不限制",
@@ -174,6 +199,8 @@ const I18N = {
     msg_completed_user: "匹配完成：共找到 {n} 个有共作关系的作者对。",
     msg_completed_console: "完成：共找到 {n} 个共作配对（mode={mode}, limit_per_pair={limit}）。",
     msg_query_failed: "查询失败：{err}",
+    msg_too_many_authors_user: "作者过多：每侧最多 {max} 个。",
+    msg_too_many_authors_console: "作者过多：每侧最多允许 {max} 个。",
     elapsed: "耗时",
     unlimited: "不限制",
     footer_title: "项目信息",
@@ -185,6 +212,14 @@ const I18N = {
     footer_features_label: "当前特性",
     footer_features_value: "共作矩阵、配对论文列表、元数据输出、建库流水线。",
     footer_license_label: "开源协议",
+    footer_visits_label: "访问量",
+    footer_copyright_label: "版权",
+    footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
+    lab_name: "南开大学 AOSP 实验室",
+    lab_slogan: "All-in-One Secure and Privacy",
+    lab_advisor_intro:
+      '导师：南开大学密码与网络空间安全学院副教授<a href="https://lixiang521.com/" target="_blank" rel="noopener">李想</a>，清华大学博士。研究方向：网络安全、协议安全、DNS 安全、互联网测量。在 S&P、USENIX Security、CCS、NDSS 等顶级会议发表论文 32 余篇，发现 250+ CVE/CNVD/CNNVD 漏洞。2024 年 ACM SIGSAC 中国优秀博士论文奖，2024 年 Pwnie Award 最具创新性研究提名。',
+    lab_qrcode_caption: "关注 AOSP 实验室",
   },
 };
 
@@ -266,7 +301,7 @@ function appendTextCell(row, text, className = "") {
 }
 
 function applyStyle(style) {
-  const nextStyle = SUPPORTED_STYLES.has(style) ? style : "campus";
+  const nextStyle = SUPPORTED_STYLES.has(style) ? style : "hotcrp";
   document.body.dataset.style = nextStyle;
   if (styleSelectEl && styleSelectEl.value !== nextStyle) {
     styleSelectEl.value = nextStyle;
@@ -277,7 +312,7 @@ function applyStyle(style) {
 }
 
 function initStyle() {
-  let initialStyle = "campus";
+  let initialStyle = "hotcrp";
   try {
     const savedStyle = window.localStorage.getItem(STYLE_STORAGE_KEY);
     if (savedStyle && SUPPORTED_STYLES.has(savedStyle)) {
@@ -312,6 +347,12 @@ function applyLanguage(lang) {
     el.textContent = t(key);
   });
 
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-html");
+    if (!key) return;
+    el.innerHTML = t(key);
+  });
+
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     const key = el.getAttribute("data-i18n-placeholder");
     if (!key) return;
@@ -319,6 +360,7 @@ function applyLanguage(lang) {
   });
 
   setHealthStatus(healthState);
+  if (typeof updateYearSliderLabel === "function") updateYearSliderLabel();
 }
 
 function initLanguage() {
@@ -395,6 +437,9 @@ function setQueryLoading(isLoading, totalPairs = 0) {
   pairsFormEl.querySelectorAll("textarea, input, select, button").forEach((el) => {
     el.disabled = false;
   });
+  if (pcConflictToggleEl && pcConflictToggleEl.checked && rightAuthorsEl) {
+    rightAuthorsEl.disabled = true;
+  }
 }
 
 async function fetchJson(url, options = {}) {
@@ -562,6 +607,15 @@ if (pairsFormEl) {
       showMsg(isConsolePage ? t("msg_require_both_console") : t("msg_require_both_user"), true);
       return;
     }
+    if (left.length > MAX_AUTHORS_PER_SIDE || right.length > MAX_AUTHORS_PER_SIDE) {
+      showMsg(
+        isConsolePage
+          ? t("msg_too_many_authors_console", { max: MAX_AUTHORS_PER_SIDE })
+          : t("msg_too_many_authors_user", { max: MAX_AUTHORS_PER_SIDE }),
+        true
+      );
+      return;
+    }
 
     const totalPairs = left.length * right.length;
     const payload = { left, right, exact_base_match: exactBaseMatch };
@@ -573,6 +627,12 @@ if (pairsFormEl) {
     if (authorLimitRaw) {
       const authorLimit = Number(authorLimitRaw);
       if (Number.isFinite(authorLimit) && authorLimit > 0) payload.author_limit = authorLimit;
+    }
+    if (yearSliderEl) {
+      const sliderVal = Number(yearSliderEl.value);
+      if (sliderVal < 30) {
+        payload.year_min = new Date().getFullYear() - sliderVal;
+      }
     }
 
     setQueryLoading(true, totalPairs);
@@ -618,7 +678,56 @@ if (pairsFormEl) {
   });
 }
 
+function updateYearSliderLabel() {
+  if (!yearSliderEl || !yearSliderLabelEl) return;
+  const val = Number(yearSliderEl.value);
+  if (val >= 30) {
+    yearSliderLabelEl.textContent = t("year_slider_all");
+  } else {
+    const since = new Date().getFullYear() - val;
+    yearSliderLabelEl.textContent = t("year_slider_recent", { n: val, since });
+  }
+}
+
+if (yearSliderEl) {
+  yearSliderEl.addEventListener("input", updateYearSliderLabel);
+}
+
+async function fetchPcMembers() {
+  if (pcMembers !== null) return pcMembers;
+  try {
+    const data = await fetchJson("/api/pc-members");
+    pcMembers = (data.members || []).map((m) => m.name);
+  } catch (_) {
+    pcMembers = [];
+  }
+  return pcMembers;
+}
+
+async function applyPcConflictState() {
+  if (!pcConflictToggleEl) return;
+  if (pcConflictToggleEl.checked) {
+    savedRightAuthors = rightAuthorsEl ? rightAuthorsEl.value : "";
+    const members = await fetchPcMembers();
+    if (rightAuthorsEl) {
+      rightAuthorsEl.value = members.join("\n");
+      rightAuthorsEl.disabled = true;
+    }
+  } else {
+    if (rightAuthorsEl) {
+      rightAuthorsEl.value = savedRightAuthors;
+      rightAuthorsEl.disabled = false;
+    }
+  }
+}
+
+if (pcConflictToggleEl) {
+  pcConflictToggleEl.addEventListener("change", applyPcConflictState);
+}
+
 initStyle();
 initLanguage();
 loadHealth();
 loadStats();
+updateYearSliderLabel();
+applyPcConflictState();

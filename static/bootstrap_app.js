@@ -66,6 +66,9 @@ const I18N = {
     footer_features_value:
       "Coauthor matrix, pair publications, metadata output, bootstrap build pipeline.",
     footer_license_label: "License",
+    footer_visits_label: "Visits",
+    footer_copyright_label: "Copyright",
+    footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
   },
   zh: {
     page_title_bootstrap: "CoAuthors 建库控制台",
@@ -123,6 +126,9 @@ const I18N = {
     footer_features_label: "当前特性",
     footer_features_value: "共作矩阵、配对论文列表、元数据输出、建库流水线。",
     footer_license_label: "开源协议",
+    footer_visits_label: "访问量",
+    footer_copyright_label: "版权",
+    footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
   },
 };
 
@@ -145,7 +151,7 @@ function fmtBytes(bytes) {
 }
 
 function applyStyle(style) {
-  const nextStyle = SUPPORTED_STYLES.has(style) ? style : "campus";
+  const nextStyle = SUPPORTED_STYLES.has(style) ? style : "hotcrp";
   document.body.dataset.style = nextStyle;
   if (styleSelectEl && styleSelectEl.value !== nextStyle) {
     styleSelectEl.value = nextStyle;
@@ -156,7 +162,7 @@ function applyStyle(style) {
 }
 
 function initStyle() {
-  let initialStyle = "campus";
+  let initialStyle = "hotcrp";
   try {
     const savedStyle = window.localStorage.getItem(STYLE_STORAGE_KEY);
     if (savedStyle && SUPPORTED_STYLES.has(savedStyle)) {

@@ -6,7 +6,7 @@
     <title data-i18n="page_title_user">CoAuthors Coauthorship Query</title>
     <link rel="stylesheet" href="/static/query_styles.css" />
   </head>
-  <body data-style="campus" data-page="user">
+  <body data-style="hotcrp" data-page="user">
     <div class="bg-layer" aria-hidden="true"></div>
 
     <main class="container">
@@ -107,6 +107,22 @@
             ></textarea>
           </label>
 
+          <div class="year-slider-group">
+            <label>
+              <span data-i18n="query_recent_years">Recent Years</span>
+              <span class="year-slider-row">
+                <input id="year-slider" type="range" min="1" max="30" value="30" />
+                <span id="year-slider-label">30</span>
+              </span>
+            </label>
+          </div>
+
+          <label class="switch-toggle">
+            <input id="pc-conflict-toggle" type="checkbox" checked />
+            <span class="switch-track"></span>
+            <span data-i18n="query_pc_conflict">CCS New PC Conflict Check</span>
+          </label>
+
           <button id="run-pairs-btn" type="submit" data-i18n="query_button_user">Start Matching</button>
         </form>
 
@@ -150,16 +166,8 @@
         <h2 data-i18n="footer_title">Project Information</h2>
         <div class="meta-grid">
           <div class="meta-row">
-            <span data-i18n="footer_dev_label">Developer</span>
-            <strong data-i18n="footer_dev_value">Nankai University AOSP Laboratory</strong>
-          </div>
-          <div class="meta-row">
-            <span data-i18n="footer_maintainer_label">Maintainer</span>
-            <strong data-i18n="footer_maintainer_value">Nankai University AOSP Laboratory</strong>
-          </div>
-          <div class="meta-row">
             <span data-i18n="footer_version_label">Version</span>
-            <strong>v2.1.0</strong>
+            <strong>v{{ app_version }}</strong>
           </div>
           <div class="meta-row">
             <span data-i18n="footer_features_label">Current Features</span>
@@ -168,6 +176,28 @@
           <div class="meta-row">
             <span data-i18n="footer_license_label">License</span>
             <strong>MIT</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="footer_visits_label">Visits</span>
+            <strong>{{ visit_count }}</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="footer_copyright_label">Copyright</span>
+            <strong data-i18n="footer_copyright_value"
+              >© 2026 AOSP Lab of Nankai University. All Rights Reserved.</strong
+            >
+          </div>
+        </div>
+
+        <div class="lab-promo">
+          <div class="lab-promo-info">
+            <h3 data-i18n="lab_name">AOSP Laboratory, Nankai University</h3>
+            <p class="lab-slogan" data-i18n="lab_slogan">All-in-One Secure and Privacy</p>
+            <p data-i18n-html="lab_advisor_intro">Advisor: Associate Professor <a href="https://lixiang521.com/" target="_blank" rel="noopener">Xiang Li</a>, College of Cryptology and Cyber Science, Nankai University. Ph.D. from Tsinghua University. Research focuses on network security, protocol security, DNS security, and Internet measurement. Published 32+ papers at top venues (S&amp;P, USENIX Security, CCS, NDSS). Discovered 250+ CVE/CNVD/CNNVD vulnerabilities. 2024 ACM SIGSAC China Excellent Doctoral Dissertation Award. Pwnie Award nominee 2024.</p>
+          </div>
+          <div class="lab-promo-qrcode">
+            <img src="/static/aosp-qrcode.jpg" alt="AOSP Lab QR Code" />
+            <span data-i18n="lab_qrcode_caption">Follow AOSP Lab</span>
           </div>
         </div>
       </footer>

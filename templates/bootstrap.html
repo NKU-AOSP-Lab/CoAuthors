@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/query_styles.css" />
     <link rel="stylesheet" href="/static/bootstrap_styles.css" />
   </head>
-  <body data-style="campus" data-page="bootstrap">
+  <body data-style="hotcrp" data-page="bootstrap">
     <div class="bg-layer" aria-hidden="true"></div>
 
     <main class="container">
@@ -149,7 +149,7 @@
           </div>
           <div class="meta-row">
             <span data-i18n="footer_version_label">Version</span>
-            <strong>v2.1.0</strong>
+            <strong>v{{ app_version }}</strong>
           </div>
           <div class="meta-row">
             <span data-i18n="footer_features_label">Current Features</span>
@@ -158,6 +158,16 @@
           <div class="meta-row">
             <span data-i18n="footer_license_label">License</span>
             <strong>MIT</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="footer_visits_label">Visits</span>
+            <strong>{{ visit_count }}</strong>
+          </div>
+          <div class="meta-row">
+            <span data-i18n="footer_copyright_label">Copyright</span>
+            <strong data-i18n="footer_copyright_value"
+              >© 2026 AOSP Lab of Nankai University. All Rights Reserved.</strong
+            >
           </div>
         </div>
       </footer>

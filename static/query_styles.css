@@ -596,6 +596,74 @@ select:focus {
   padding: 0;
 }
 
+.switch-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.switch-toggle input {
+  display: none;
+}
+
+.switch-track {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  background: var(--border-color, #ccc);
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.switch-track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.switch-toggle input:checked + .switch-track {
+  background: var(--focus-outline, #4a90d9);
+}
+
+.switch-toggle input:checked + .switch-track::after {
+  transform: translateX(20px);
+}
+
+.year-slider-group label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.year-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.year-slider-row input[type="range"] {
+  flex: 1;
+  min-width: 120px;
+  cursor: pointer;
+}
+
+.year-slider-row span {
+  width: 180px;
+  flex-shrink: 0;
+  font-size: 0.92em;
+  color: var(--ink-secondary, #666);
+  white-space: nowrap;
+}
+
 button {
   border: var(--button-border);
   border-radius: var(--control-radius);
@@ -913,6 +981,69 @@ body[data-style="slate"] button {
   border-radius: 7px;
 }
 
+.lab-promo {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line, #e0e0e0);
+}
+
+.lab-promo-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lab-promo-info h3 {
+  margin: 0 0 4px;
+  font-size: 1.05em;
+}
+
+.lab-promo-info .lab-slogan {
+  margin: 0 0 10px;
+  font-style: italic;
+  color: var(--ink-secondary, #666);
+  font-size: 0.95em;
+}
+
+.lab-promo-info p {
+  margin: 0;
+  font-size: 0.9em;
+  line-height: 1.6;
+  color: var(--ink-secondary, #555);
+}
+
+.lab-promo-info a {
+  color: #1a5fb4;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.lab-promo-info a:hover {
+  color: #0d47a1;
+  text-decoration: underline;
+}
+
+.lab-promo-qrcode {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.lab-promo-qrcode img {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+}
+
+.lab-promo-qrcode span {
+  font-size: 0.82em;
+  color: var(--ink-secondary, #888);
+}
+
 @media (max-width: 980px) {
   .container {
     width: min(var(--page-width), 96vw);
@@ -935,6 +1066,12 @@ body[data-style="slate"] button {
 
   .pair-form {
     grid-template-columns: 1fr;
+  }
+
+  .lab-promo {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   table {
