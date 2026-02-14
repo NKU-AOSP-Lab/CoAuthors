@@ -8,6 +8,21 @@ from pathlib import Path
 from typing import Any, Callable, Literal
 
 import requests
+from urllib.parse import urlparse
+
+ALLOWED_DOWNLOAD_HOSTS = {"dblp.org", "dblp.uni-trier.de"}
+
+
+def _validate_download_url(url: str) -> None:
+    """Only allow downloads from trusted DBLP hosts to prevent SSRF."""
+    parsed = urlparse(url)
+    if parsed.scheme not in ("http", "https"):
+        raise ValueError(f"Unsupported URL scheme: {parsed.scheme}")
+    if parsed.hostname not in ALLOWED_DOWNLOAD_HOSTS:
+        raise ValueError(
+            f"Download host not allowed: {parsed.hostname}. "
+            f"Only {ALLOWED_DOWNLOAD_HOSTS} are permitted."
+        )
 
 PUB_TAGS = {
     "article",
@@ -75,6 +90,7 @@ def _download_file(
     should_stop: ShouldStopCallback,
 ) -> None:
     log(f"Downloading {url} -> {target_path}")
+    _validate_download_url(url)
     target_path.parent.mkdir(parents=True, exist_ok=True)
 
     with requests.get(url, stream=True, timeout=(20, 120)) as response:
@@ -268,12 +284,27 @@ def _build_db(
     pending_titles: list[tuple[int, str]] = []
     pending_authors: list[tuple[int, str]] = []
 
-    context = ET.iterparse(
-        str(xml_path),
-        events=("end",),
+    # Secure XML parser: allow local DTD for legitimate character entities
+    # (e.g. &auml;) but block external SYSTEM entity resolution (file://, http://)
+    # to prevent XXE attacks.
+    class _SafeResolver(ET.Resolver):
+        def resolve(self, system_url, public_id, context):
+            if system_url and system_url.endswith(".dtd"):
+                return self.resolve_filename(system_url, context)
+            return self.resolve_string("", context)
+
+    parser = ET.XMLParser(
         load_dtd=True,
         resolve_entities=True,
         huge_tree=True,
+        no_network=True,
+    )
+    parser.resolvers.add(_SafeResolver())
+
+    context = ET.iterparse(
+        str(xml_path),
+        events=("end",),
+        parser=parser,
     )
 
     count = 0
