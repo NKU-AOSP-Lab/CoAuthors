@@ -631,7 +631,7 @@ select:focus {
 }
 
 .switch-toggle input:checked + .switch-track {
-  background: var(--focus-outline, #4a90d9);
+  background: #34c759;
 }
 
 .switch-toggle input:checked + .switch-track::after {

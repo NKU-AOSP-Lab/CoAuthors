@@ -68,7 +68,7 @@ const I18N = {
     table_venue: "Venue",
     table_type: "Type",
     query_recent_years: "Recent Years",
-    query_pc_conflict: "CCS New PC Conflict Check",
+    query_pc_conflict: "CCS 2026 PC Conflict Check (2026/02/11)",
     year_slider_all: "All",
     year_slider_recent: "Recent {n} years (since {since})",
     placeholder_left: "Geoffrey Hinton\nYann LeCun (New York University)",
@@ -92,7 +92,7 @@ const I18N = {
     footer_version_label: "Version",
     footer_features_label: "Current Features",
     footer_features_value:
-      "Coauthor matrix, pair publications, metadata output, bootstrap build pipeline.",
+      "Coauthor matrix; pair publications;",
     footer_license_label: "License",
     footer_visits_label: "Visits",
     footer_copyright_label: "Copyright",
@@ -137,7 +137,7 @@ const I18N = {
     table_venue: "会议/期刊",
     table_type: "类型",
     query_recent_years: "近年范围",
-    query_pc_conflict: "CCS New PC Conflict 检查",
+    query_pc_conflict: "CCS 2026 PC Conflict 检查 (2026/02/11)",
     year_slider_all: "全部",
     year_slider_recent: "近 {n} 年（{since} 年起）",
     placeholder_left: "Geoffrey Hinton\nYann LeCun (New York University)",
@@ -160,7 +160,7 @@ const I18N = {
     footer_maintainer_value: "南开大学 AOSP 实验室",
     footer_version_label: "版本",
     footer_features_label: "当前特性",
-    footer_features_value: "共作矩阵、配对论文列表、元数据输出、建库流水线。",
+    footer_features_value: "共作矩阵；配对论文列表；",
     footer_license_label: "开源协议",
     footer_visits_label: "访问量",
     footer_copyright_label: "版权",
@@ -574,9 +574,9 @@ if (pairsFormEl) {
       if (Number.isFinite(authorLimit) && authorLimit > 0) payload.author_limit = authorLimit;
     }
     if (yearSliderEl) {
-      const sliderVal = Number(yearSliderEl.value);
-      if (sliderVal < 30) {
-        payload.year_min = new Date().getFullYear() - sliderVal;
+      const years = 29 - Number(yearSliderEl.value);
+      if (years > 0) {
+        payload.year_min = new Date().getFullYear() - years;
       }
     }
 
@@ -611,11 +611,12 @@ if (pairsFormEl) {
 function updateYearSliderLabel() {
   if (!yearSliderEl || !yearSliderLabelEl) return;
   const val = Number(yearSliderEl.value);
-  if (val >= 30) {
+  const years = 29 - val;
+  if (years === 0) {
     yearSliderLabelEl.textContent = t("year_slider_all");
   } else {
-    const since = new Date().getFullYear() - val;
-    yearSliderLabelEl.textContent = t("year_slider_recent", { n: val, since });
+    const since = new Date().getFullYear() - years;
+    yearSliderLabelEl.textContent = t("year_slider_recent", { n: years, since });
   }
 }
 
