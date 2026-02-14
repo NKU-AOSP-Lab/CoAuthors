@@ -89,6 +89,8 @@ const I18N = {
     footer_dev_value: "Nankai University AOSP Laboratory",
     footer_maintainer_label: "Maintainer",
     footer_maintainer_value: "Nankai University AOSP Laboratory",
+    footer_members_label: "Members",
+    footer_members_value: "Xiang Li, Zuyao Xu, Yuqi Qiu, Fubin Wu, Fasheng Miao, Lu Sun",
     footer_version_label: "Version",
     footer_features_label: "Current Features",
     footer_features_value:
@@ -158,6 +160,8 @@ const I18N = {
     footer_dev_value: "南开大学 AOSP 实验室",
     footer_maintainer_label: "维护团队",
     footer_maintainer_value: "南开大学 AOSP 实验室",
+    footer_members_label: "成员",
+    footer_members_value: "Xiang Li, Zuyao Xu, Yuqi Qiu, Fubin Wu, Fasheng Miao, Lu Sun",
     footer_version_label: "版本",
     footer_features_label: "当前特性",
     footer_features_value: "共作矩阵；配对论文列表；",
