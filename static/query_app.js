@@ -14,8 +14,10 @@ const loadingBoxEl = document.getElementById("pairs-loading");
 const loadingTextEl = document.getElementById("pairs-loading-text");
 const loadingElapsedEl = document.getElementById("pairs-loading-elapsed");
 
-const styleSelectEl = document.getElementById("style-select");
 const languageSelectEl = document.getElementById("language-select");
+const sidebarEl = document.getElementById("sidebar");
+const sidebarToggleEl = document.getElementById("sidebar-toggle");
+const sidebarOverlayEl = document.getElementById("sidebar-overlay");
 const yearSliderEl = document.getElementById("year-slider");
 const yearSliderLabelEl = document.getElementById("year-slider-label");
 const pcConflictToggleEl = document.getElementById("pc-conflict-toggle");
@@ -27,9 +29,7 @@ let healthState = "checking";
 let pcMembers = null;
 let savedRightAuthors = "";
 
-const STYLE_STORAGE_KEY = "coauthors_style";
 const LANG_STORAGE_KEY = "coauthors_lang";
-const SUPPORTED_STYLES = new Set(["hotcrp", "journal", "nordic", "campus", "folio", "slate"]);
 const SUPPORTED_LANGS = new Set(["en", "zh"]);
 const MAX_AUTHORS_PER_SIDE = 50;
 let currentLang = "en";
@@ -40,7 +40,6 @@ const I18N = {
     hero_user_title: "CoAuthors Coauthorship Query",
     hero_user_subtitle:
       "Enter two author sets to find coauthored pairs and publication metadata.",
-    control_style: "Style",
     control_language: "Language",
     lang_en: "English",
     lang_zh: "Chinese",
@@ -111,7 +110,6 @@ const I18N = {
     page_title_user: "CoAuthors 共作查询",
     hero_user_title: "CoAuthors 共作查询系统",
     hero_user_subtitle: "输入两组作者姓名，返回存在共作关系的作者对与论文元数据。",
-    control_style: "页面风格",
     control_language: "语言",
     lang_en: "英文",
     lang_zh: "中文",
@@ -139,7 +137,7 @@ const I18N = {
     table_venue: "会议/期刊",
     table_type: "类型",
     query_recent_years: "近年范围",
-    query_pc_conflict: "CCS 2026 PC Conflict 检查 (2026/02/11)",
+    query_pc_conflict: "CCS 2026 New PC Conflict 检查 (2026/02/11)",
     year_slider_all: "全部",
     year_slider_recent: "近 {n} 年（{since} 年起）",
     placeholder_left: "Geoffrey Hinton\nYann LeCun (New York University)",
@@ -256,30 +254,24 @@ function appendTextCell(row, text, className = "") {
   return cell;
 }
 
-function applyStyle(style) {
-  const nextStyle = SUPPORTED_STYLES.has(style) ? style : "hotcrp";
-  document.body.dataset.style = nextStyle;
-  if (styleSelectEl && styleSelectEl.value !== nextStyle) {
-    styleSelectEl.value = nextStyle;
+function toggleSidebar() {
+  if (!sidebarEl) return;
+  const isOpen = sidebarEl.classList.toggle("is-open");
+  if (sidebarOverlayEl) {
+    sidebarOverlayEl.classList.toggle("is-active", isOpen);
   }
-  try {
-    window.localStorage.setItem(STYLE_STORAGE_KEY, nextStyle);
-  } catch (_) {}
 }
 
-function initStyle() {
-  let initialStyle = "hotcrp";
-  try {
-    const savedStyle = window.localStorage.getItem(STYLE_STORAGE_KEY);
-    if (savedStyle && SUPPORTED_STYLES.has(savedStyle)) {
-      initialStyle = savedStyle;
-    }
-  } catch (_) {}
+function closeSidebar() {
+  if (sidebarEl) sidebarEl.classList.remove("is-open");
+  if (sidebarOverlayEl) sidebarOverlayEl.classList.remove("is-active");
+}
 
-  applyStyle(initialStyle);
-  if (styleSelectEl) {
-    styleSelectEl.addEventListener("change", (event) => applyStyle(event.target.value));
-  }
+if (sidebarToggleEl) {
+  sidebarToggleEl.addEventListener("click", toggleSidebar);
+}
+if (sidebarOverlayEl) {
+  sidebarOverlayEl.addEventListener("click", closeSidebar);
 }
 
 function applyLanguage(lang) {
@@ -660,7 +652,6 @@ if (pcConflictToggleEl) {
   pcConflictToggleEl.addEventListener("change", applyPcConflictState);
 }
 
-initStyle();
 initLanguage();
 loadHealth();
 loadStats();

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,31 +6,14 @@
     <title data-i18n="page_title_user">CoAuthors Coauthorship Query</title>
     <link rel="stylesheet" href="/static/query_styles.css" />
   </head>
-  <body data-style="hotcrp" data-page="user">
-    <div class="bg-layer" aria-hidden="true"></div>
+  <body data-page="user">
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-    <main class="container">
-      <header class="hero">
-        <div>
-          <h1 data-i18n="hero_user_title">CoAuthors Coauthorship Query</h1>
-          <p data-i18n="hero_user_subtitle">
-            Enter two author sets to find coauthored pairs and publication metadata.
-          </p>
-        </div>
-
-        <div class="top-controls">
-          <div class="style-control">
-            <label for="style-select" data-i18n="control_style">Style</label>
-            <select id="style-select">
-              <option value="hotcrp">HotCRP Classic</option>
-              <option value="journal">Journal Serif</option>
-              <option value="nordic">Nordic Light</option>
-              <option value="campus">Campus Modern</option>
-              <option value="folio">Folio Minimal</option>
-              <option value="slate">Slate Pro</option>
-            </select>
-          </div>
-
+    <div class="app-layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+          <h3 data-i18n="control_language">Language</h3>
           <div class="style-control">
             <label for="language-select" data-i18n="control_language">Language</label>
             <select id="language-select">
@@ -39,11 +22,9 @@
             </select>
           </div>
         </div>
-      </header>
 
-      <section class="status-grid">
-        <article class="card">
-          <h2 data-i18n="status_title">System Status</h2>
+        <div class="sidebar-section">
+          <h3 data-i18n="status_title">System Status</h3>
           <div class="status-row">
             <span class="label" data-i18n="status_service">Service</span>
             <span id="health-status" class="chip chip-warn" data-i18n="status_checking">Checking</span>
@@ -56,10 +37,10 @@
             <span class="label" data-i18n="status_date">Data Date</span>
             <span id="data-date">-</span>
           </div>
-        </article>
+        </div>
 
-        <article class="card">
-          <h2 data-i18n="stats_title">Data Scale</h2>
+        <div class="sidebar-section">
+          <h3 data-i18n="stats_title">Data Scale</h3>
           <div class="kpi-row">
             <div class="kpi">
               <span class="kpi-label" data-i18n="stats_publications">Publications</span>
@@ -70,138 +51,147 @@
               <strong id="kpi-authors">-</strong>
             </div>
           </div>
-        </article>
-      </section>
+        </div>
 
-      <section class="card">
-        <h2 data-i18n="query_title_user">Coauthorship Matching</h2>
-        <p class="hint" data-i18n="query_hint_user">
-          One author per line. If an input contains an organization (e.g., `Yann LeCun (New York University)`), it will be stripped automatically.
-        </p>
+        <div class="sidebar-section">
+          <h3 data-i18n="footer_title">Project Information</h3>
+          <div class="meta-grid">
+            <div class="meta-row">
+              <span data-i18n="footer_members_label">Members</span>
+              <strong data-i18n="footer_members_value">Xiang Li, Zuyao Xu, Yuqi Qiu, Fubin Wu, Fasheng Miao, Lu Sun</strong>
+            </div>
+            <div class="meta-row">
+              <span data-i18n="footer_version_label">Version</span>
+              <strong>v{{ app_version }}</strong>
+            </div>
+            <div class="meta-row">
+              <span data-i18n="footer_features_label">Current Features</span>
+              <strong data-i18n="footer_features_value">Coauthor matrix; pair publications;</strong>
+            </div>
+            <div class="meta-row">
+              <span data-i18n="footer_license_label">License</span>
+              <strong>MIT</strong>
+            </div>
+            <div class="meta-row">
+              <span data-i18n="footer_visits_label">Visits</span>
+              <strong>{{ visit_count }}</strong>
+            </div>
+            <div class="meta-row">
+              <span data-i18n="footer_copyright_label">Copyright</span>
+              <strong data-i18n="footer_copyright_value">© 2026 AOSP Lab of Nankai University. All Rights Reserved.</strong>
+            </div>
+          </div>
+        </div>
 
-        <form id="pairs-form" class="pair-form user-form">
-          <label>
-            <span data-i18n="query_left_user">Author Set A (one per line)</span>
-            <textarea
-              id="left-authors"
-              rows="9"
-              data-i18n-placeholder="placeholder_left"
-              placeholder="Geoffrey Hinton&#10;Yann LeCun (New York University)"
-              required
-            ></textarea>
-          </label>
+        <div class="sidebar-section">
+          <div class="lab-promo">
+            <div class="lab-promo-info">
+              <h3 data-i18n="lab_name">AOSP Laboratory, Nankai University</h3>
+              <p class="lab-slogan" data-i18n="lab_slogan">All-in-One Security and Privacy Lab</p>
+              <p data-i18n="lab_description">The lab focuses on diversified security and privacy research, spanning network security, Web security, LLM security, and emerging security risks. It is dedicated to enhancing overall security in scenarios where network technologies converge with large models, and continuously supports the security community through original research contributions.</p>
+              <p data-i18n-html="lab_advisor_intro">Advisor: <a href="https://lixiang521.com/" target="_blank" rel="noopener">Xiang Li</a>, Associate Professor at the College of Cryptology and Cyber Science, Nankai University. National Outstanding Talent in Cyberspace. Research areas include network security, protocol security, vulnerability discovery, and LLM security. Published 30+ papers at international conferences, including 10+ as first/corresponding author, achieving a grand slam of first-author papers across all top-4 cybersecurity venues, and has presented at Black Hat for four consecutive years. Led or participated in 9 national-level projects, filed 10+ patents, and received 250+ vulnerability IDs. Awards include ACM SIGSAC China Outstanding Doctoral Dissertation, GeekPwn champion &amp; runner-up, Pwnie Award nomination for Most Innovative Research, and ACSAC Cybersecurity Impact Award.</p>
+            </div>
+            <div class="lab-promo-qrcode">
+              <img src="/static/aosp-qrcode.jpg" alt="AOSP Lab QR Code" />
+              <span data-i18n="lab_qrcode_caption">Follow AOSP Lab</span>
+            </div>
+          </div>
+        </div>
+      </aside>
 
-          <label>
-            <span data-i18n="query_right_user">Author Set B (one per line)</span>
-            <textarea
-              id="right-authors"
-              rows="9"
-              data-i18n-placeholder="placeholder_right"
-              placeholder="Andrew Y. Ng&#10;Yoshua Bengio (Universite de Montreal)"
-              required
-            ></textarea>
-          </label>
+      <main class="content">
+        <div class="page-header">
+          <h1 data-i18n="hero_user_title">CoAuthors Coauthorship Query</h1>
+          <p data-i18n="hero_user_subtitle">
+            Enter two author sets to find coauthored pairs and publication metadata.
+          </p>
+        </div>
 
-          <div class="year-slider-group">
+        <section class="content-section">
+          <h2 data-i18n="query_title_user">Coauthorship Matching</h2>
+          <p class="hint" data-i18n="query_hint_user">
+            One author per line. If an input contains an organization (e.g., `Yann LeCun (New York University)`), it will be stripped automatically.
+          </p>
+
+          <form id="pairs-form" class="pair-form user-form">
             <label>
-              <span data-i18n="query_recent_years">Recent Years</span>
-              <span class="year-slider-row">
-                <input id="year-slider" type="range" min="0" max="29" value="29" />
-                <span id="year-slider-label">30</span>
-              </span>
+              <span data-i18n="query_left_user">Author Set A (one per line)</span>
+              <textarea
+                id="left-authors"
+                rows="9"
+                data-i18n-placeholder="placeholder_left"
+                placeholder="Geoffrey Hinton&#10;Yann LeCun (New York University)"
+                required
+              ></textarea>
             </label>
+
+            <label>
+              <span data-i18n="query_right_user">Author Set B (one per line)</span>
+              <textarea
+                id="right-authors"
+                rows="9"
+                data-i18n-placeholder="placeholder_right"
+                placeholder="Andrew Y. Ng&#10;Yoshua Bengio (Universite de Montreal)"
+                required
+              ></textarea>
+            </label>
+
+            <label class="switch-toggle">
+              <input id="pc-conflict-toggle" type="checkbox" checked />
+              <span class="switch-track"></span>
+              <span data-i18n="query_pc_conflict">CCS New PC Conflict Check</span>
+            </label>
+
+            <div class="year-slider-group">
+              <label>
+                <span data-i18n="query_recent_years">Recent Years</span>
+                <span class="year-slider-row">
+                  <input id="year-slider" type="range" min="0" max="29" value="29" />
+                  <span id="year-slider-label">30</span>
+                </span>
+              </label>
+            </div>
+
+            <button id="run-pairs-btn" type="submit" data-i18n="query_button_user">Start Matching</button>
+          </form>
+
+          <div id="pairs-loading" class="loading-box" aria-live="polite">
+            <span class="spinner" aria-hidden="true"></span>
+            <span id="pairs-loading-text" data-i18n="loading_default">Matching...</span>
+            <span id="pairs-loading-elapsed"></span>
           </div>
 
-          <label class="switch-toggle">
-            <input id="pc-conflict-toggle" type="checkbox" checked />
-            <span class="switch-track"></span>
-            <span data-i18n="query_pc_conflict">CCS New PC Conflict Check</span>
+          <p id="pairs-msg" class="msg"></p>
+
+          <h3 data-i18n="matrix_title_user">Coauthorship Matrix</h3>
+          <div class="table-wrap">
+            <table>
+              <thead id="matrix-head"></thead>
+              <tbody id="matrix-body"></tbody>
+            </table>
+          </div>
+
+          <h3 data-i18n="pubs_title_user">Coauthored Publications</h3>
+          <label class="pair-picker">
+            <span data-i18n="pair_selector_user">Select Pair</span>
+            <select id="pair-selector"></select>
           </label>
-
-          <button id="run-pairs-btn" type="submit" data-i18n="query_button_user">Start Matching</button>
-        </form>
-
-        <div id="pairs-loading" class="loading-box" aria-live="polite">
-          <span class="spinner" aria-hidden="true"></span>
-          <span id="pairs-loading-text" data-i18n="loading_default">Matching...</span>
-          <span id="pairs-loading-elapsed"></span>
-        </div>
-
-        <p id="pairs-msg" class="msg"></p>
-
-        <h3 data-i18n="matrix_title_user">Coauthorship Matrix</h3>
-        <div class="table-wrap">
-          <table>
-            <thead id="matrix-head"></thead>
-            <tbody id="matrix-body"></tbody>
-          </table>
-        </div>
-
-        <h3 data-i18n="pubs_title_user">Coauthored Publications</h3>
-        <label class="pair-picker">
-          <span data-i18n="pair_selector_user">Select Pair</span>
-          <select id="pair-selector"></select>
-        </label>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="table_title">Title</th>
-                <th data-i18n="table_year">Year</th>
-                <th data-i18n="table_venue">Venue</th>
-                <th data-i18n="table_type">Type</th>
-              </tr>
-            </thead>
-            <tbody id="pair-pubs-body"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <footer class="card footer-card">
-        <h2 data-i18n="footer_title">Project Information</h2>
-        <div class="meta-grid">
-          <div class="meta-row">
-            <span data-i18n="footer_members_label">Members</span>
-            <strong data-i18n="footer_members_value">Xiang Li, Zuyao Xu, Yuqi Qiu, Fubin Wu, Fasheng Miao, Lu Sun</strong>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="table_title">Title</th>
+                  <th data-i18n="table_year">Year</th>
+                  <th data-i18n="table_venue">Venue</th>
+                  <th data-i18n="table_type">Type</th>
+                </tr>
+              </thead>
+              <tbody id="pair-pubs-body"></tbody>
+            </table>
           </div>
-          <div class="meta-row">
-            <span data-i18n="footer_version_label">Version</span>
-            <strong>v{{ app_version }}</strong>
-          </div>
-          <div class="meta-row">
-            <span data-i18n="footer_features_label">Current Features</span>
-            <strong data-i18n="footer_features_value">Coauthor matrix, pair publications, metadata output, bootstrap build pipeline.</strong>
-          </div>
-          <div class="meta-row">
-            <span data-i18n="footer_license_label">License</span>
-            <strong>MIT</strong>
-          </div>
-          <div class="meta-row">
-            <span data-i18n="footer_visits_label">Visits</span>
-            <strong>{{ visit_count }}</strong>
-          </div>
-          <div class="meta-row">
-            <span data-i18n="footer_copyright_label">Copyright</span>
-            <strong data-i18n="footer_copyright_value"
-              >© 2026 AOSP Lab of Nankai University. All Rights Reserved.</strong
-            >
-          </div>
-        </div>
-
-        <div class="lab-promo">
-          <div class="lab-promo-info">
-            <h3 data-i18n="lab_name">AOSP Laboratory, Nankai University</h3>
-            <p class="lab-slogan" data-i18n="lab_slogan">All-in-One Security and Privacy Lab</p>
-            <p data-i18n="lab_description">The lab focuses on diversified security and privacy research, spanning network security, Web security, LLM security, and emerging security risks. It is dedicated to enhancing overall security in scenarios where network technologies converge with large models, and continuously supports the security community through original research contributions.</p>
-            <p data-i18n-html="lab_advisor_intro">Advisor: <a href="https://lixiang521.com/" target="_blank" rel="noopener">Xiang Li</a>, Associate Professor at the College of Cryptology and Cyber Science, Nankai University. National Outstanding Talent in Cyberspace. Research areas include network security, protocol security, vulnerability discovery, and LLM security. Published 30+ papers at international conferences, including 10+ as first/corresponding author, achieving a grand slam of first-author papers across all top-4 cybersecurity venues, and has presented at Black Hat for four consecutive years. Led or participated in 9 national-level projects, filed 10+ patents, and received 250+ vulnerability IDs. Awards include ACM SIGSAC China Outstanding Doctoral Dissertation, GeekPwn champion &amp; runner-up, Pwnie Award nomination for Most Innovative Research, and ACSAC Cybersecurity Impact Award.</p>
-          </div>
-          <div class="lab-promo-qrcode">
-            <img src="/static/aosp-qrcode.jpg" alt="AOSP Lab QR Code" />
-            <span data-i18n="lab_qrcode_caption">Follow AOSP Lab</span>
-          </div>
-        </div>
-      </footer>
-    </main>
+        </section>
+      </main>
+    </div>
 
     <script src="/static/query_app.js"></script>
   </body>
