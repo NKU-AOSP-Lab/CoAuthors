@@ -1,5 +1,5 @@
 ﻿<p align="center">
-  <img src="../images/logo.svg" alt="CoAuthors Logo" width="56" style="vertical-align:middle;" />
+  <img src="/en/latest/image/logo.svg" alt="CoAuthors Logo" width="56" style="vertical-align:middle;" />
   <span style="font-size:1.8rem;font-weight:700;vertical-align:middle;margin-left:8px;">CoAuthors 文档</span>
 </p>
 
@@ -44,5 +44,7 @@ CoAuthors 是 DBLP 合作者关系查询前端，重点负责页面交互、查�
 - 独立部署 CoAuthors 前端的工程师
 - 需要将前端流程接入 DBLP 后端服务的团队
 - 关注缓存命中、遥测与稳定性的维护者
+
+
 
 

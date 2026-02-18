@@ -1,5 +1,5 @@
 ﻿<p align="center">
-  <img src="images/logo.svg" alt="CoAuthors Logo" width="56" style="vertical-align:middle;" />
+  <img src="/en/latest/image/logo.svg" alt="CoAuthors Logo" width="56" style="vertical-align:middle;" onerror="this.onerror=null;this.src='image/logo.svg';" />
   <span style="font-size:1.8rem;font-weight:700;vertical-align:middle;margin-left:8px;">CoAuthors Documentation</span>
 </p>
 
@@ -44,5 +44,7 @@ CoAuthors is the DBLP co-authorship frontend. It focuses on user interaction, qu
 - Engineers deploying a standalone co-author lookup frontend
 - Teams integrating UI workflows with DBLP backend services
 - Maintainers tracking runtime cache and telemetry behavior
+
+
 
 
