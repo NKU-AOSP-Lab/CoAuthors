@@ -1,0 +1,25 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">CoAuthors Logo</title>
+  <desc id="desc">Purple background logo with white coauthor graph and C mark.</desc>
+
+  <rect x="6" y="6" width="116" height="116" rx="26" fill="#711a5f" stroke="#9f3e8c" stroke-width="3" />
+
+  <g fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.92">
+    <path d="M30 42 L64 24 L98 42" />
+    <path d="M30 86 L64 104 L98 86" />
+    <path d="M30 42 L30 86" />
+    <path d="M98 42 L98 86" />
+    <path d="M64 24 L64 104" opacity="0.48" />
+  </g>
+
+  <g fill="#711a5f" stroke="#ffffff" stroke-width="3">
+    <circle cx="30" cy="42" r="5.5" />
+    <circle cx="64" cy="24" r="5.5" />
+    <circle cx="98" cy="42" r="5.5" />
+    <circle cx="30" cy="86" r="5.5" />
+    <circle cx="64" cy="104" r="5.5" />
+    <circle cx="98" cy="86" r="5.5" />
+  </g>
+
+  <path d="M78 53 A18 18 0 1 0 78 79" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" transform="rotate(-18 60 66)" />
+</svg>

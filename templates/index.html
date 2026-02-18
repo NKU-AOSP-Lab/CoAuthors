@@ -1,12 +1,23 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title data-i18n="page_title_user">CoAuthors Coauthorship Query</title>
     <link rel="stylesheet" href="/static/query_styles.css" />
+    <link rel="stylesheet" href="/static/material_theme.css" />
   </head>
   <body data-page="user">
+    <header class="top-titlebar">
+      <div class="brand-block">
+        <img class="brand-logo" src="/static/coauthors-logo.svg" alt="CoAuthors Logo" />
+        <div class="brand-copy">
+          <strong class="brand-name">CoAuthors</strong>
+          <p data-i18n="brand_tagline">Query coauthor relationships, publication links, and conflict signals from DBLP</p>
+        </div>
+      </div>
+      <span class="brand-chip" data-i18n="brand_chip">由AOSP实验室维护</span>
+    </header>
     <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
@@ -57,6 +68,10 @@
           <h3 data-i18n="footer_title">Project Information</h3>
           <div class="meta-grid">
             <div class="meta-row">
+              <span data-i18n="footer_owner_label">Developer & Maintainer</span>
+              <strong data-i18n="footer_owner_value">Nankai University AOSP Laboratory</strong>
+            </div>
+            <div class="meta-row">
               <span data-i18n="footer_members_label">Members</span>
               <strong data-i18n="footer_members_value">Xiang Li, Zuyao Xu, Yuqi Qiu, Fubin Wu, Fasheng Miao, Lu Sun</strong>
             </div>
@@ -78,7 +93,7 @@
             </div>
             <div class="meta-row">
               <span data-i18n="footer_copyright_label">Copyright</span>
-              <strong data-i18n="footer_copyright_value">© 2026 AOSP Lab of Nankai University. All Rights Reserved.</strong>
+              <strong data-i18n="footer_copyright_value">&copy; 2026 AOSP Lab of Nankai University. All Rights Reserved.</strong>
             </div>
           </div>
         </div>
@@ -100,13 +115,6 @@
       </aside>
 
       <main class="content">
-        <div class="page-header">
-          <h1 data-i18n="hero_user_title">CoAuthors Coauthorship Query</h1>
-          <p data-i18n="hero_user_subtitle">
-            Enter two author sets to find coauthored pairs and publication metadata.
-          </p>
-        </div>
-
         <section class="content-section">
           <h2 data-i18n="query_title_user">Coauthorship Matching</h2>
           <p class="hint" data-i18n="query_hint_user">
@@ -193,6 +201,21 @@
       </main>
     </div>
 
+    <script>
+      window.__API_BASE__ = "{{ api_base }}";
+    </script>
     <script src="/static/query_app.js"></script>
   </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+

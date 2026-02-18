@@ -31,10 +31,14 @@ Thumbs.db
 # Logs
 *.log
 
+# Local agent instructions
+CLAUDE.md
+
 # Build / package
 dist/
 build/
 *.egg-info/
+/site/
 
 # Git
 .git/

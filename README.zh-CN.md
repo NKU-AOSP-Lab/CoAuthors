@@ -3,7 +3,7 @@
   <strong>CoAuthors</strong>
 </div>
 
-<p align="center">DBLP co-authorship query frontend with runtime cache and telemetry.</p>
+<p align="center">DBLP 合作者关系查询前端，提供缓存与运行观测能力。</p>
 
 <p align="center">[<a href="./README.md"><strong>EN</strong></a>] | [<a href="./README.zh-CN.md"><strong>CN</strong></a>]</p>
 
@@ -14,18 +14,18 @@
   <img src="https://img.shields.io/badge/docs-MkDocs-526CFE?logo=materialformkdocs&logoColor=white" alt="docs" />
 </p>
 
-## Overview
+## 项目概览
 
-CoAuthors is the web interface project for querying DBLP co-author relationships. It focuses on query UX, matrix rendering, and runtime observability, while delegating DBLP data services to `DblpService`.
+CoAuthors 是 DBLP 合作者查询的 Web 前端项目，聚焦页面交互、结果矩阵渲染与运行时可观测性；DBLP 数据构建与查询能力由 `DblpService` 提供。
 
-## Core Capabilities
+## 核心能力
 
-- Query and render co-author collaboration matrices.
-- Call backend APIs for pairwise co-author statistics.
-- Store runtime cache and telemetry data in SQLite.
-- Provide runtime inspection APIs for frontend operation metrics.
+- 发起合作者查询并展示协作矩阵结果。
+- 调用后端接口获取作者对协作统计数据。
+- 使用 SQLite 持久化运行时缓存与遥测事件。
+- 暴露运行时统计接口，便于前端调试和验收。
 
-## Local Run
+## 本地运行
 
 ```bash
 cd CoAuthors
@@ -33,7 +33,7 @@ python -m pip install -r requirements.txt
 python -m uvicorn app:app --host 0.0.0.0 --port 8090
 ```
 
-Run bundled backend service (optional but recommended for local integration):
+可选地同时启动内置后端（推荐本地联调时使用）：
 
 ```bash
 cd CoAuthors/DblpService
@@ -41,29 +41,29 @@ python -m pip install -r requirements.txt
 python -m uvicorn app:app --host 0.0.0.0 --port 8091
 ```
 
-Open:
+访问地址：
 
 - `http://localhost:8090/`
 - `http://localhost:8091/bootstrap`
 
-## Docker
+## Docker 启动
 
 ```bash
 cd CoAuthors
 docker compose up -d --build
 ```
 
-Default ports:
+默认端口：
 
 - `coauthors-frontend`: `8090`
 - `coauthors-dblp-service`: `8091`
 
-## Documentation
+## 文档
 
-- English docs: `docs/en/`
-- Chinese docs: `docs/zh/`
+- 英文文档：`docs/en/`
+- 中文文档：`docs/zh/`
 
-Local preview:
+本地预览：
 
 ```bash
 cd CoAuthors

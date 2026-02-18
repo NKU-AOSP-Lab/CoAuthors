@@ -6,6 +6,7 @@
     <title data-i18n="page_title_bootstrap">CoAuthors Bootstrap Console</title>
     <link rel="stylesheet" href="/static/query_styles.css" />
     <link rel="stylesheet" href="/static/bootstrap_styles.css" />
+    <link rel="stylesheet" href="/static/material_theme.css" />
   </head>
   <body data-style="hotcrp" data-page="bootstrap">
     <div class="bg-layer" aria-hidden="true"></div>
@@ -134,13 +135,9 @@
         <h2 data-i18n="footer_title">Project Information</h2>
         <div class="meta-grid">
           <div class="meta-row">
-            <span data-i18n="footer_dev_label">Developer</span>
-            <strong data-i18n="footer_dev_value">Nankai University AOSP Laboratory</strong>
-          </div>
-          <div class="meta-row">
-            <span data-i18n="footer_maintainer_label">Maintainer</span>
-            <strong data-i18n="footer_maintainer_value">Nankai University AOSP Laboratory</strong>
-          </div>
+              <span data-i18n="footer_owner_label">Developer & Maintainer</span>
+              <strong data-i18n="footer_owner_value">Nankai University AOSP Laboratory</strong>
+            </div>
           <div class="meta-row">
             <span data-i18n="footer_version_label">Version</span>
             <strong>v{{ app_version }}</strong>
@@ -160,13 +157,18 @@
           <div class="meta-row">
             <span data-i18n="footer_copyright_label">Copyright</span>
             <strong data-i18n="footer_copyright_value"
-              >© 2026 AOSP Lab of Nankai University. All Rights Reserved.</strong
+              >&copy; 2026 AOSP Lab of Nankai University. All Rights Reserved.</strong
             >
           </div>
         </div>
       </footer>
     </main>
 
+    <script>
+      window.__API_BASE__ = "{{ api_base }}";
+    </script>
     <script src="/static/bootstrap_app.js"></script>
   </body>
 </html>
+
+

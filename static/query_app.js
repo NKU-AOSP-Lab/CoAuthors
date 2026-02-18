@@ -40,6 +40,8 @@ const I18N = {
     hero_user_title: "CoAuthors Coauthorship Query",
     hero_user_subtitle:
       "Enter two author sets to find coauthored pairs and publication metadata.",
+    brand_tagline: "Query coauthor relationships, publication links, and conflict signals from DBLP",
+    brand_chip: "Maintained by AOSP Laboratory",
     control_language: "Language",
     lang_en: "English",
     lang_zh: "Chinese",
@@ -84,6 +86,8 @@ const I18N = {
     msg_too_many_authors: "Too many authors. Max {max} per side.",
     elapsed: "Elapsed",
     footer_title: "Project Information",
+    footer_owner_label: "Developer & Maintainer",
+    footer_owner_value: "Nankai University AOSP Laboratory",
     footer_dev_label: "Developer",
     footer_dev_value: "Nankai University AOSP Laboratory",
     footer_maintainer_label: "Maintainer",
@@ -97,7 +101,7 @@ const I18N = {
     footer_license_label: "License",
     footer_visits_label: "Visits",
     footer_copyright_label: "Copyright",
-    footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
+    footer_copyright_value: "\u00A9 2026 AOSP Lab of Nankai University. All Rights Reserved.",
     lab_name: "AOSP Laboratory, Nankai University",
     lab_slogan: "All-in-One Security and Privacy Lab",
     lab_description:
@@ -110,6 +114,8 @@ const I18N = {
     page_title_user: "CoAuthors 共作查询",
     hero_user_title: "CoAuthors 共作查询系统",
     hero_user_subtitle: "输入两组作者姓名，返回存在共作关系的作者对与论文元数据。",
+    brand_tagline: "基于 DBLP 查询作者共作关系、论文关联与冲突信号",
+    brand_chip: "由AOSP实验室维护",
     control_language: "语言",
     lang_en: "英文",
     lang_zh: "中文",
@@ -154,6 +160,8 @@ const I18N = {
     msg_too_many_authors: "作者过多：每侧最多 {max} 个。",
     elapsed: "耗时",
     footer_title: "项目信息",
+    footer_owner_label: "开发与维护",
+    footer_owner_value: "南开大学 AOSP 实验室",
     footer_dev_label: "开发团队",
     footer_dev_value: "南开大学 AOSP 实验室",
     footer_maintainer_label: "维护团队",
@@ -166,7 +174,7 @@ const I18N = {
     footer_license_label: "开源协议",
     footer_visits_label: "访问量",
     footer_copyright_label: "版权",
-    footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
+    footer_copyright_value: "\u00A9 2026 AOSP Lab of Nankai University. All Rights Reserved.",
     lab_name: "南开大学 AOSP 实验室",
     lab_slogan: "All-in-One Security and Privacy Lab",
     lab_description:
@@ -389,10 +397,73 @@ function setQueryLoading(isLoading, totalPairs = 0) {
 }
 
 async function fetchJson(url, options = {}) {
+  const apiBaseRaw = String(window.__API_BASE__ || "").trim();
+  const apiBase = apiBaseRaw.endsWith("/") ? apiBaseRaw.slice(0, -1) : apiBaseRaw;
+  const fullUrl = apiBase ? `${apiBase}${url}` : url;
+  const resp = await fetch(fullUrl, options);
+  const data = await resp.json().catch(() => ({}));
+  if (!resp.ok) throw new Error(data.detail || `HTTP ${resp.status}`);
+  return data;
+}
+
+async function fetchLocalJson(url, options = {}) {
   const resp = await fetch(url, options);
   const data = await resp.json().catch(() => ({}));
   if (!resp.ok) throw new Error(data.detail || `HTTP ${resp.status}`);
   return data;
+}
+
+function hashText(input) {
+  let hash = 2166136261;
+  for (let i = 0; i < input.length; i += 1) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0");
+}
+
+function buildPairsCacheKey(payload) {
+  const serialized = JSON.stringify(payload);
+  return `pairs:v1:${hashText(serialized)}`;
+}
+
+async function getRuntimeCache(cacheKey) {
+  try {
+    const data = await fetchLocalJson("/api/runtime/cache/get", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: cacheKey }),
+    });
+    if (data.hit && data.data && typeof data.data === "object") {
+      return data.data;
+    }
+  } catch (_) {}
+  return null;
+}
+
+function putRuntimeCache(cacheKey, payload) {
+  void fetchLocalJson("/api/runtime/cache/put", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ key: cacheKey, data: payload }),
+  }).catch(() => {});
+}
+
+function logRuntimeQueryEvent(event) {
+  void fetchLocalJson("/api/runtime/query/event", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(event),
+  }).catch(() => {});
+}
+
+function renderPairsResponse(data) {
+  renderMatrix(data.left_authors || [], data.right_authors || [], data.matrix || {});
+  renderPairSelector(data.pair_pubs || []);
+}
+
+function countCoauthoredPairs(data) {
+  return (data.pair_pubs || []).filter((pair) => (pair.count ?? 0) > 0).length;
 }
 
 function renderMatrix(leftAuthors, rightAuthors, matrix) {
@@ -575,28 +646,62 @@ if (pairsFormEl) {
         payload.year_min = new Date().getFullYear() - years;
       }
     }
+    const cacheKey = buildPairsCacheKey(payload);
+    const startedAt = Date.now();
 
     setQueryLoading(true, totalPairs);
     showMsg(t("msg_matching", { n: fmtNum(totalPairs) }));
 
     try {
-      const data = await fetchJson("/api/coauthors/pairs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+      const cached = await getRuntimeCache(cacheKey);
+      let data = cached;
+      let cacheHit = true;
+
+      if (!data) {
+        cacheHit = false;
+        data = await fetchJson("/api/coauthors/pairs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        putRuntimeCache(cacheKey, data);
+      }
+
+      renderPairsResponse(data);
+      const coauthoredPairCount = countCoauthoredPairs(data);
+      const durationMs = Date.now() - startedAt;
+
+      logRuntimeQueryEvent({
+        event_type: "pairs_lookup",
+        query_hash: cacheKey,
+        left_count: left.length,
+        right_count: right.length,
+        total_pairs: totalPairs,
+        cache_hit: cacheHit,
+        success: true,
+        duration_ms: durationMs,
+        extra: {
+          year_min: payload.year_min ?? null,
+          exact_base_match: exactBaseMatch,
+        },
       });
-
-      renderMatrix(data.left_authors || [], data.right_authors || [], data.matrix || {});
-      renderPairSelector(data.pair_pubs || []);
-
-      const coauthoredPairCount = (data.pair_pubs || []).filter((pair) => (pair.count ?? 0) > 0)
-        .length;
 
       showMsg(t("msg_completed", { n: fmtNum(coauthoredPairCount) }));
     } catch (err) {
       clearNode(matrixHeadEl);
       clearNode(matrixBodyEl);
       renderPairSelector([]);
+      logRuntimeQueryEvent({
+        event_type: "pairs_lookup",
+        query_hash: cacheKey,
+        left_count: left.length,
+        right_count: right.length,
+        total_pairs: totalPairs,
+        cache_hit: false,
+        success: false,
+        duration_ms: Date.now() - startedAt,
+        error_message: err?.message || "unknown error",
+      });
       showMsg(t("msg_query_failed", { err: err.message }), true);
     } finally {
       setQueryLoading(false);
@@ -657,3 +762,8 @@ loadHealth();
 loadStats();
 updateYearSliderLabel();
 applyPcConflictState();
+
+
+
+
+

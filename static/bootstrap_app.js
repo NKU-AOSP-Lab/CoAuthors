@@ -54,6 +54,8 @@ const I18N = {
     msg_stop_failed: "Stop failed: {err}",
     msg_reset_failed: "Reset failed: {err}",
     footer_title: "Project Information",
+    footer_owner_label: "Developer & Maintainer",
+    footer_owner_value: "Nankai University AOSP Laboratory",
     footer_dev_label: "Developer",
     footer_dev_value: "Nankai University AOSP Laboratory",
     footer_maintainer_label: "Maintainer",
@@ -65,7 +67,7 @@ const I18N = {
     footer_license_label: "License",
     footer_visits_label: "Visits",
     footer_copyright_label: "Copyright",
-    footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
+    footer_copyright_value: "\u00A9 2026 AOSP Lab of Nankai University. All Rights Reserved.",
   },
   zh: {
     page_title_bootstrap: "CoAuthors 建库控制台",
@@ -112,6 +114,8 @@ const I18N = {
     msg_stop_failed: "停止失败：{err}",
     msg_reset_failed: "重置失败：{err}",
     footer_title: "项目信息",
+    footer_owner_label: "开发与维护",
+    footer_owner_value: "南开大学 AOSP 实验室",
     footer_dev_label: "开发团队",
     footer_dev_value: "南开大学 AOSP 实验室",
     footer_maintainer_label: "维护团队",
@@ -122,7 +126,7 @@ const I18N = {
     footer_license_label: "开源协议",
     footer_visits_label: "访问量",
     footer_copyright_label: "版权",
-    footer_copyright_value: "© 2026 AOSP Lab of Nankai University. All Rights Reserved.",
+    footer_copyright_value: "\u00A9 2026 AOSP Lab of Nankai University. All Rights Reserved.",
   },
 };
 
@@ -211,7 +215,10 @@ function initLanguage() {
 }
 
 async function fetchJson(url, options = {}) {
-  const resp = await fetch(url, options);
+  const apiBaseRaw = String(window.__API_BASE__ || "").trim();
+  const apiBase = apiBaseRaw.endsWith("/") ? apiBaseRaw.slice(0, -1) : apiBaseRaw;
+  const fullUrl = apiBase ? `${apiBase}${url}` : url;
+  const resp = await fetch(fullUrl, options);
   const data = await resp.json().catch(() => ({}));
   if (!resp.ok) {
     throw new Error(data.detail || `HTTP ${resp.status}`);
@@ -331,3 +338,5 @@ initStyle();
 initLanguage();
 refreshAll();
 setInterval(refreshAll, 2000);
+
+
