@@ -60,8 +60,8 @@ Default ports:
 
 ## Documentation
 
-- English docs: `docs/en/`
-- Chinese docs: `docs/zh/`
+- English docs: https://coauthors.readthedocs.io/en/latest/
+- Docs source (in repo): `docs/en/`, `docs/zh/`
 
 Local preview:
 

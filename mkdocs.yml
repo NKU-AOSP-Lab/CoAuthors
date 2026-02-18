@@ -5,7 +5,7 @@ repo_name: CoAuthors
 
 theme:
   name: material
-  logo: assets/logo.svg
+  logo: images/logo.svg
   palette:
     - scheme: default
       primary: custom
